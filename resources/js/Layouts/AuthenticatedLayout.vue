@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-screen bg-gray-200 font-roboto">
-        <div v-if="$page.props.flash"> {{ showFlashAlert($page.props.flash) }}</div>
+        <div v-if="$page.props.flash"> {{ showFlashAlert($page.props.flash) }} {{ delete $page.props.flash }}</div>
         <Navigation />
 
         <div class="flex flex-1 flex-col overflow-hidden">

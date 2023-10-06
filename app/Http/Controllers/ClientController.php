@@ -34,4 +34,11 @@ class ClientController extends Controller
         Client::create($request->validated());
         return back()->with("success", "Cliente Registrado con exito!");
     }
+
+    public function update(ClientRequest $request, Client $client)
+    {
+        $client->fill($request->validated());
+        $client->save();
+        return back()->with("success", "Cliente Actualizado con exito!");
+    }
 }

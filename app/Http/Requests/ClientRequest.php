@@ -32,8 +32,8 @@ class ClientRequest extends FormRequest
         ];
 
         if($this->method() === 'PUT'){
-            $rules['ci'] = "required|unique:clients,ci,{$this->employee->id}";
-            $rules['email'] = "required|unique:clients,email,{$this->employee->id}";
+            $rules['ci'] = "required|unique:clients,ci,{$this->client->id}";
+            $rules['email'] = "required|unique:clients,email,{$this->client->id}";
         }
 
         return $rules;

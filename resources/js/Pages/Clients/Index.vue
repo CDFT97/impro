@@ -33,18 +33,21 @@ const form = useForm({
   company: ""
 });
 
-const openModal = (op, name, email, phone, department, employee) => {
+const openModal = (op, client) => {
   modal.value = true;
   operation.value = op;
-  id.value = employee;
   if (op == 1) {
     title.value = "Registrar Cliente";
   } else {
+    id.value = client.id;
     title.value = "Editar Cliente";
-    form.name = name;
-    form.email = email;
-    form.phone = phone;
-    form.department_id = department;
+    form.name = client.name;
+    form.last_name = client.last_name;
+    form.ci = client.ci;
+    form.address = client.address;
+    form.phone_number = client.phone_number;
+    form.email = client.email;
+    form.company = client.company;
   }
 };
 const closeModal = () => {
@@ -53,22 +56,12 @@ const closeModal = () => {
 };
 const save = () => {
   if (operation.value == 1) {
-    form.post(route("clients.store"), {
-      onSuccess: () => {
-        ok("Employee created");
-      },
-    });
+    form.post(route("clients.store"));
+    closeModal();
   } else {
-    form.put(route("employees.update", id.value), {
-      onSuccess: () => {
-        ok("Employee updated");
-      },
-    });
+    form.put(route("clients.update", id.value));
+    closeModal();
   }
-};
-const ok = (msj) => {
-  closeModal();
-  Swal.fire({ title: msj, icon: "success" });
 };
 const deleteClient = async (client) => {
   const alerta = Swal.mixin({
@@ -149,7 +142,7 @@ const deleteClient = async (client) => {
               </td>
 
               <td class="px-2 py-2 flex justify-center">
-                <WarningButton>
+                <WarningButton @click="openModal(0, client)">
                   <i class="fa-solid fa-edit"></i>
                 </WarningButton>
                 <DangerButton class="ml-2" @click="deleteClient(client)">
@@ -165,7 +158,7 @@ const deleteClient = async (client) => {
       </div>
     </div>
     <!-- Modal Start -->
-    <Modal :show="modal" @close="closeModal" width="100%">
+    <Modal :show="modal" @close="closeModal">
       <h2 class="p-3 text-lg font.medium text-hray-900">{{ title }}</h2>
       <div class="p-3 mt-1 pb-0">
         <InputLabel for="name" value="Nombre:"></InputLabel>
