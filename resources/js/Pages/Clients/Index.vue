@@ -30,7 +30,6 @@ const form = useForm({
   phone: "",
   department_id: "",
 });
-const formPage = useForm({});
 
 const openModal = (op, name, email, phone, department, employee) => {
   modal.value = true;
@@ -71,27 +70,26 @@ const ok = (msj) => {
   closeModal();
   Swal.fire({ title: msj, icon: "success" });
 };
-const deleteEmployee = (id, name) => {
+const deleteClient = async (client) => {
   const alerta = Swal.mixin({
     buttonsStyling: true,
   });
-  alerta
-    .fire({
-      title: "Are you sure delete " + name + " ?",
+  try {
+    const result = await alerta.fire({
+      title: `Quiere eliminar al cliente  ${client.name} ${client.last_name}?`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: '<i class="fa-solid fa-check"></i> Yes,delete',
-      cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancel',
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        form.delete(route("employees.destroy", id), {
-          onSuccess: () => {
-            ok("Employee deleted");
-          },
-        });
-      }
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: '<i class="fa-solid fa-check"></i> Si, eliminalo',
+      cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancelar',
     });
+    if (result.isConfirmed) {
+      form.delete(route("clients.destroy", client.id));
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 </script>
 
@@ -154,7 +152,7 @@ const deleteEmployee = (id, name) => {
                 <WarningButton>
                   <i class="fa-solid fa-edit"></i>
                 </WarningButton>
-                <DangerButton class="ml-2">
+                <DangerButton class="ml-2" @click="deleteClient(client)">
                   <i class="fa-solid fa-trash"></i>
                 </DangerButton>
               </td>
