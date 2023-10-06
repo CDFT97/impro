@@ -35,7 +35,7 @@
             </nav-link>
 
             
-            <nav-link :href="route('clients.index')" :active="route().current('clients')">
+            <nav-link :href="route('clients.index')" :active="route().current('clients.index')">
                 <i class="fa-solid fa-chart-pie"></i>
                 Clientes
             </nav-link>
