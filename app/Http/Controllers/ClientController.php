@@ -13,7 +13,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::paginate(10);
+        $clients = Client::orderBy('created_at', 'desc')->paginate(10);
         
         return Inertia::render('Clients/Index', compact('clients'));
     }
@@ -31,6 +31,7 @@ class ClientController extends Controller
 
     public function store(ClientRequest $request)
     {
-        dd($request->validated());
+        Client::create($request->validated());
+        return back()->with("success", "Cliente Registrado con exito!");
     }
 }

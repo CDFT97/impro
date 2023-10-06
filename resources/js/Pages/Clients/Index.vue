@@ -25,9 +25,12 @@ const props = defineProps({
 
 const form = useForm({
   name: "",
+  last_name: "",
+  ci: "",
+  address: "",
+  phone_number: "",
   email: "",
-  phone: "",
-  department_id: "",
+  company: ""
 });
 
 const openModal = (op, name, email, phone, department, employee) => {
