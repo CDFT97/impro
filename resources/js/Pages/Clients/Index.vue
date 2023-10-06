@@ -12,7 +12,7 @@ import Modal from "@/Components/Modal.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { nextTick, ref } from "vue";
 import Swal from "sweetalert2";
-import VueTailwindPagination from "@ocrv/vue-tailwind-pagination";
+import Paginator from "@/Components/Paginator.vue";
 
 const nameInput = ref(null);
 const modal = ref(false);
@@ -31,9 +31,7 @@ const form = useForm({
   department_id: "",
 });
 const formPage = useForm({});
-const onPageClick = (event) => {
-  formPage.get(route("clients.index", { page: event }));
-};
+
 const openModal = (op, name, email, phone, department, employee) => {
   modal.value = true;
   nextTick(() => nameInput.value.focus());
@@ -95,25 +93,6 @@ const deleteEmployee = (id, name) => {
       }
     });
 };
-
-const setClass = (pagination_data, current) => {
-  if (pagination_data.current_page == current ) {
-      return "flex items-center justify-center px-3 h-8 text-white border border-gray-300 bg-gray-500 cursor-not-allowed"
-} else {
-    return "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-  }
-}
-
-const handlePagination = (url, pagination_data, current) => {
-    if(pagination_data.current_page == current){
-        return console.log("sin accion");
-    }
-    formPage.get(url);
-}
-
-const handleNextAndPrev = (url) => {
-    if(url) formPage.get(url);
-}
 </script>
 
 <template>
@@ -183,48 +162,8 @@ const handleNextAndPrev = (url) => {
           </tbody>
         </table>
       </div>
-      <!-- <div class="bg-white grid v-screen place-items-center">
-        <VueTailwindPagination
-          :current="clients.currentPage"
-          :total="clients.total"
-          :per-page="clients.perPage"
-          @page-changed="onPageClick($event)"
-        ></VueTailwindPagination>
-      </div> -->
       <div class="bg-white grid v-screen place-items-center">
-        <nav aria-label="Page navigation example">
-          <ul class="inline-flex -space-x-px text-sm">
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
-                :class="clients.prev_page_url == null ? 'cursor-not-allowed' : ''"
-                @click="handleNextAndPrev(clients.prev_page_url, clients, clients.current_page)"
-                >Previous</a
-              >
-            </li>
-            <template v-for="link in clients.links" :key="link">
-                <li v-if="parseInt(link.label)">
-                  <a
-                    href="#"
-                    aria-current="page"
-                    :class="setClass(clients, link.label)"
-                    @click="handlePagination(link.url, clients, link.label)"
-                    >{{ link.label }}</a
-                  >
-                </li>
-            </template>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 "
-                :class="clients.next_page_url == null ? 'cursor-not-allowed' : ''"
-                @click="handleNextAndPrev(clients.next_page_url)"
-                >Next</a
-              >
-            </li>
-          </ul>
-        </nav>
+        <Paginator :paginated_data="clients"></Paginator>
       </div>
     </div>
     <Modal :show="modal" @close="closeModal" width="100%">
