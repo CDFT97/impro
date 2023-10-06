@@ -102,7 +102,7 @@ const deleteClient = async (client) => {
         Clientes
       </h2>
     </template>
-    <div class="py-12">
+    <div class="py-12 border rounded-md">
       <div class="bg-white grid v-screen place-items-center">
         <div class="mt-3 mb-3 flex">
           <PrimaryButton @click="openModal(true)">
@@ -160,7 +160,7 @@ const deleteClient = async (client) => {
           </tbody>
         </table>
       </div>
-      <div class="bg-white grid v-screen place-items-center">
+      <div class="bg-white grid v-screen place-items-center pb-10">
         <Paginator :paginated_data="clients"></Paginator>
       </div>
     </div>
