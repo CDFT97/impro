@@ -34,22 +34,13 @@
                 Dashboard
             </nav-link>
 
-            <nav-link :href="route('departments.index')" :active="route().current('departments.index')">
-                <i class="fa-solid fa-building"></i>
-                Departaments
-            </nav-link>
-            <nav-link :href="route('employees.index')" :active="route().current('employees.index')">
-                <i class="fa-solid fa-user"></i>
-                Employeers
-            </nav-link>
-            <nav-link :href="route('graphic')" :active="route().current('graphic')">
+            
+            <nav-link :href="route('clients.index')" :active="route().current('clients')">
                 <i class="fa-solid fa-chart-pie"></i>
-                Graphic
+                Clientes
             </nav-link>
-            <nav-link :href="route('reports')" :active="route().current('reports')">
-                <i class="fa-solid fa-table "></i>
-                Reports
-            </nav-link>
+
+
             <nav-link :href="route('users.index')" :active="route().current('users.index')">
                 <template #icon>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
