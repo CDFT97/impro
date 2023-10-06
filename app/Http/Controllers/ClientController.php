@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
@@ -26,5 +27,10 @@ class ClientController extends Controller
             Log::error($th);
             return back()->with('error', 'El cliente no se puede eliminar ya que tiene ventas asociadas');
         }
+    }
+
+    public function store(ClientRequest $request)
+    {
+        dd($request->validated());
     }
 }

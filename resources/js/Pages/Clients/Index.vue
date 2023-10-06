@@ -5,12 +5,11 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import WarningButton from "@/Components/WarningButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Modal from "@/Components/Modal.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
 
@@ -33,13 +32,12 @@ const form = useForm({
 
 const openModal = (op, name, email, phone, department, employee) => {
   modal.value = true;
-  nextTick(() => nameInput.value.focus());
   operation.value = op;
   id.value = employee;
   if (op == 1) {
-    title.value = "Create employee";
+    title.value = "Registrar Cliente";
   } else {
-    title.value = "Edit employee";
+    title.value = "Editar Cliente";
     form.name = name;
     form.email = email;
     form.phone = phone;
@@ -52,7 +50,7 @@ const closeModal = () => {
 };
 const save = () => {
   if (operation.value == 1) {
-    form.post(route("employees.store"), {
+    form.post(route("clients.store"), {
       onSuccess: () => {
         ok("Employee created");
       },
@@ -66,7 +64,6 @@ const save = () => {
   }
 };
 const ok = (msj) => {
-  form.reset();
   closeModal();
   Swal.fire({ title: msj, icon: "success" });
 };
@@ -103,17 +100,17 @@ const deleteClient = async (client) => {
       </h2>
     </template>
     <div class="py-12 border rounded-md">
-      <div class="bg-white grid v-screen place-items-center">
-        <div class="mt-3 mb-3 flex">
+      <div class="bg-white grid v-screen ">
+        <div class="mt-3 mb-3 flex ms-10">
           <PrimaryButton @click="openModal(true)">
-            <i class="fa-solid fa-plus-circle"></i> Add
+            <i class="fa-solid fa-plus-circle"></i> Registrar Cliente
           </PrimaryButton>
         </div>
       </div>
       <div
         class="bg-white grid v-screen place-items-center overflow-x-auto py-3"
       >
-        <table class="table-auto border border-gray-400" style="width: 80%">
+        <table class="table-auto border border-gray-400" style="width: 95%">
           <thead>
             <tr class="bg-gray-100">
               <th class="px-2 py-2">#</th>
@@ -164,70 +161,103 @@ const deleteClient = async (client) => {
         <Paginator :paginated_data="clients"></Paginator>
       </div>
     </div>
+    <!-- Modal Start -->
     <Modal :show="modal" @close="closeModal" width="100%">
       <h2 class="p-3 text-lg font.medium text-hray-900">{{ title }}</h2>
-      <div class="p-3 mt-6">
-        <InputLabel for="name" value="Name:"></InputLabel>
+      <div class="p-3 mt-1 pb-0">
+        <InputLabel for="name" value="Nombre:"></InputLabel>
         <TextInput
           id="name"
           ref="nameInput"
           v-model="form.name"
           type="text"
           class="mt-1 block w-3/4"
-          placeholder="Name"
+          placeholder="Nombre"
         ></TextInput>
         <InputError :message="form.errors.name" class="mt-2"></InputError>
       </div>
-      <div class="p-3">
-        <InputLabel for="email" value="Email:"></InputLabel>
+      <div class="p-3 pb-0">
+        <InputLabel for="last_name" value="Apellido:"></InputLabel>
+        <TextInput
+          id="last_name"
+          ref="last_nameInput"
+          v-model="form.last_name"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Apellido"
+        ></TextInput>
+        <InputError :message="form.errors.last_name" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="ci" value="Cedula:"></InputLabel>
+        <TextInput
+          id="ci"
+          ref="ciInput"
+          v-model="form.ci"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Cedula"
+        ></TextInput>
+        <InputError :message="form.errors.ci" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="address" value="Dirección:"></InputLabel>
+        <TextInput
+          id="address"
+          ref="addressInput"
+          v-model="form.address"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Dirección"
+        ></TextInput>
+        <InputError :message="form.errors.address" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="email" value="Correo:"></InputLabel>
         <TextInput
           id="email"
           v-model="form.email"
           type="text"
           class="mt-1 block w-3/4"
-          placeholder="Email"
+          placeholder="Correo"
         ></TextInput>
         <InputError :message="form.errors.email" class="mt-2"></InputError>
       </div>
-      <div class="p-3">
-        <InputLabel for="phone" value="Phone:"></InputLabel>
+      <div class="p-3 pb-0">
+        <InputLabel for="phone_number" value="Telefono:"></InputLabel>
         <TextInput
-          id="phone"
-          v-model="form.phone"
+          id="phone_number"
+          v-model="form.phone_number"
           type="text"
           class="mt-1 block w-3/4"
-          placeholder="Phone"
+          placeholder="Telefono"
         ></TextInput>
-        <InputError :message="form.errors.phone" class="mt-2"></InputError>
+        <InputError :message="form.errors.phone_number" class="mt-2"></InputError>
       </div>
-      <div class="p-3">
-        <InputLabel for="department_id" value="Department:"></InputLabel>
-        <SelectInput
-          id="department_id"
-          :options="departments"
-          v-model="form.department_id"
+      <div class="p-3 pb-0">
+        <InputLabel for="company" value="Empresa:"></InputLabel>
+        <TextInput
+          id="company"
+          v-model="form.company"
           type="text"
           class="mt-1 block w-3/4"
-        ></SelectInput>
-        <InputError
-          :message="form.errors.department_id"
-          class="mt-2"
-        ></InputError>
+          placeholder="Empresa"
+        ></TextInput>
+        <InputError :message="form.errors.company" class="mt-2"></InputError>
       </div>
-      <div class="p-3 mt-6">
+      <div class="p-3 mt-2">
         <PrimaryButton :disabled="form.processing" @click="save">
-          <i class="fa-solid fa-save"></i> Save
+          <i class="fa-solid fa-save"></i> Guardar
         </PrimaryButton>
-      </div>
-      <div class="p-3 mt-6 flex justify-end">
         <SecondaryButton
           class="ml-3"
           :disabled="form.processing"
           @click="closeModal"
         >
-          Cancel
+          Cancelar
         </SecondaryButton>
       </div>
     </Modal>
+    <!-- Modal End -->
   </AuthenticatedLayout>
 </template>
