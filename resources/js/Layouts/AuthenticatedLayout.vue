@@ -1,5 +1,6 @@
 <template>
     <div class="flex h-screen bg-gray-200 font-roboto">
+        <div v-if="$page.props.flash"> {{ showFlashAlert($page.props.flash) }} {{ delete $page.props.flash }}</div>
         <Navigation />
 
         <div class="flex flex-1 flex-col overflow-hidden">
@@ -21,4 +22,11 @@
 <script setup>
 import Header from '@/Layouts/Header.vue';
 import Navigation from '@/Layouts/Navigation.vue';
+import  { useAlertsStore } from '@/Stores/alerts';
+
+const alerts = useAlertsStore();
+const showFlashAlert = (flash) => {
+    if(flash.error)  alerts.error(flash.error);
+    if(flash.success)  alerts.success(flash.success);
+}
 </script>
