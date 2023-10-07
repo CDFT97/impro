@@ -17,7 +17,8 @@ class Client extends Model
         'email',
         'company',
         'type',
-        'discount'
+        'discount',
+        'description'
     ];
 
     const TYPE = [

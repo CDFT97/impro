@@ -25,7 +25,8 @@ class ClientFactory extends Factory
             'email' => $this->faker->email(),
             'company' => $this->faker->company(),
             'type' => $type = rand(0,1),
-            'discount' => $type == 1 ? rand(0, 50) : null
+            'discount' => $type == 1 ? rand(0, 50) : null,
+            'description' => $this->faker->sentence(rand(3,6))
         ];
     }
 }

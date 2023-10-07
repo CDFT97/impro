@@ -33,7 +33,8 @@ const form = useForm({
   email: "",
   company: "",
   type: 3,
-  discount: 0
+  discount: 0,
+  description : ""
 });
 
 const openModal = (op, client) => {
@@ -54,6 +55,7 @@ const openModal = (op, client) => {
     form.email = client.email;
     form.company = client.company;
     form.type = client.type
+    form.description = client.description
     if(client.type == 1) {
       form.discount = client.discount
     }
@@ -255,6 +257,17 @@ const updateFormType = (e) => {
           placeholder="Empresa"
         ></TextInput>
         <InputError :message="form.errors.company" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="description" value="Descripción:"></InputLabel>
+        <TextInput
+          id="description"
+          v-model="form.description"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Descripcion o comentario"
+        ></TextInput>
+        <InputError :message="form.errors.description" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="type" value="Tipo:"></InputLabel>
