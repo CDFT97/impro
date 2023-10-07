@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('phone_number',50);
             $table->string('email',80)->unique();
             $table->string('company',80);
+            $table->tinyInteger('type')->comment("0 - Normal, 1 - Publicista");
+            $table->integer('discount')->nullable()->comment("% de descuento");
             $table->timestamps();
         });
     }

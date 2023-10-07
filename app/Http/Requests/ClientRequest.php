@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class ClientRequest extends FormRequest
 {
     /**
@@ -28,7 +28,9 @@ class ClientRequest extends FormRequest
             'address' => 'required',
             'phone_number' => 'required',
             'email' => 'required|unique:clients,email',
-            'company' => 'required'
+            'company' => 'required',
+            'type' => [Rule::in([0,1])],
+            'discount' => 'required_if:type,1',
         ];
 
         if($this->method() === 'PUT'){

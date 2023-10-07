@@ -16,5 +16,17 @@ class Client extends Model
         'phone_number',
         'email',
         'company',
+        'type',
+        'discount'
     ];
+
+    const TYPE = [
+        0 => "Normal",
+        1 => "Publicista"
+    ];
+
+    // protected function getTypeAttribute()
+    // {
+    //     return Client::TYPE[$this->attributes['type']];
+    // }
 }
