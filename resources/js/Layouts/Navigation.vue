@@ -49,6 +49,13 @@
                 Proveedores
             </nav-link>
 
+            <nav-link :href="route('purchases.index')" :active="route().current('purchases.index')">
+                <template #icon>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </template>
+                Compras
+            </nav-link>
+
 
             <nav-link :href="route('users.index')" :active="route().current('users.index')">
                 <template #icon>
