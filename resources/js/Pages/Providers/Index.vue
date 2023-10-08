@@ -7,7 +7,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import WarningButton from "@/Components/WarningButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import Modal from "@/Components/Modal.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
@@ -28,37 +27,32 @@ const form = useForm({
   name: "",
   last_name: "",
   ci: "",
-  address: "",
+  rif: "",
   phone_number: "",
+  address: "",
   email: "",
+  description : "",
   company: "",
-  type: 3,
-  discount: 0,
-  description : ""
 });
 
-const openModal = (op, client) => {
+const openModal = (op, provider) => {
   modal.value = true;
   operation.value = op;
   form.reset();
   if (op == 1) {
-    
     title.value = "Registrar Proveedor";
   } else {
-    id.value = client.id;
+    id.value = provider.id;
     title.value = "Editar Proveedor";
-    form.name = client.name;
-    form.last_name = client.last_name;
-    form.ci = client.ci;
-    form.address = client.address;
-    form.phone_number = client.phone_number;
-    form.email = client.email;
-    form.company = client.company;
-    form.type = client.type
-    form.description = client.description
-    if(client.type == 1) {
-      form.discount = client.discount
-    }
+    form.name = provider.name;
+    form.last_name = provider.last_name;
+    form.ci = provider.ci;
+    form.rif = provider.rif;
+    form.phone_number = provider.phone_number;
+    form.address = provider.address;
+    form.email = provider.email;
+    form.description = provider.description;
+    form.company = provider.company;
   }
 };
 const closeModal = () => {
@@ -98,9 +92,6 @@ const deleteProvider = async (provider) => {
   }
 };
 
-const updateFormType = (e) => {
-  form.type = e
-}
 </script>
 
 <template>
@@ -214,6 +205,29 @@ const updateFormType = (e) => {
         <InputError :message="form.errors.ci" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
+        <InputLabel for="ci" value="Rif:"></InputLabel>
+        <TextInput
+          id="rif"
+          ref="rifInput"
+          v-model="form.rif"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Rif"
+        ></TextInput>
+        <InputError :message="form.errors.rif" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="phone_number" value="Telefono:"></InputLabel>
+        <TextInput
+          id="phone_number"
+          v-model="form.phone_number"
+          type="text"
+          class="mt-1 block w-3/4"
+          placeholder="Telefono"
+        ></TextInput>
+        <InputError :message="form.errors.phone_number" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
         <InputLabel for="address" value="Dirección:"></InputLabel>
         <TextInput
           id="address"
@@ -237,17 +251,6 @@ const updateFormType = (e) => {
         <InputError :message="form.errors.email" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="phone_number" value="Telefono:"></InputLabel>
-        <TextInput
-          id="phone_number"
-          v-model="form.phone_number"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Telefono"
-        ></TextInput>
-        <InputError :message="form.errors.phone_number" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
         <InputLabel for="company" value="Empresa:"></InputLabel>
         <TextInput
           id="company"
@@ -268,30 +271,6 @@ const updateFormType = (e) => {
           placeholder="Descripcion o comentario"
         ></TextInput>
         <InputError :message="form.errors.description" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="type" value="Tipo:"></InputLabel>
-        <SelectInput
-          id="type"
-          v-model="form.type"
-          @update="updateFormType"
-          class="mt-1 block w-full"
-          :options="[{id: 0, name: 'Cliente'}, {id: 1, name: 'Publicista'}]"
-          placeholder="Seleccione Tipo de cliente"
-        ></SelectInput>
-        <InputError :message="form.errors.type" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0" v-if="form.type == 1">
-        <InputLabel for="discount" value="Descuento(%):"></InputLabel>
-        <TextInput
-          id="discount"
-          v-model="form.discount"
-          type="number"
-          min="0"
-          class="mt-1 block w-3/4"
-          placeholder="% de descuento, ejemplo: 5"
-        ></TextInput>
-        <InputError :message="form.errors.discount" class="mt-2"></InputError>
       </div>
       <div class="p-3 mt-2">
         <PrimaryButton :disabled="form.processing" @click="save">

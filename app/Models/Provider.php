@@ -19,6 +19,5 @@ class Provider extends Model
         'email',
         'description',
         'company',
-        'description',
     ];
 }

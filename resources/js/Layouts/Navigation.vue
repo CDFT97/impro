@@ -36,12 +36,16 @@
 
             
             <nav-link :href="route('clients.index')" :active="route().current('clients.index')">
-                <i class="fa-solid fa-users"></i>
+                <template #icon>
+                    <i class="fa-solid fa-users"></i>
+                </template>
                 Clientes
             </nav-link>
 
             <nav-link :href="route('providers.index')" :active="route().current('providers.index')">
-                <i class="fa-solid fa-truck"></i>
+                <template #icon>
+                    <i class="fa-solid fa-truck"></i>
+                </template>
                 Proveedores
             </nav-link>
 
