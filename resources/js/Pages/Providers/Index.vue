@@ -43,10 +43,10 @@ const openModal = (op, client) => {
   form.reset();
   if (op == 1) {
     
-    title.value = "Registrar Cliente";
+    title.value = "Registrar Proveedor";
   } else {
     id.value = client.id;
-    title.value = "Editar Cliente";
+    title.value = "Editar Proveedor";
     form.name = client.name;
     form.last_name = client.last_name;
     form.ci = client.ci;
@@ -76,13 +76,13 @@ const save = () => {
     })
   }
 };
-const deleteClient = async (client) => {
+const deleteProvider = async (provider) => {
   const alerta = Swal.mixin({
     buttonsStyling: true,
   });
   try {
     const result = await alerta.fire({
-      title: `Quiere eliminar al cliente  ${client.name} ${client.last_name}?`,
+      title: `Quiere eliminar al proveedor  ${provider.name}?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -91,7 +91,7 @@ const deleteClient = async (client) => {
       cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancelar',
     });
     if (result.isConfirmed) {
-      form.delete(route("providers.destroy", client.id));
+      form.delete(route("providers.destroy", provider.id));
     }
   } catch (error) {
     console.error(error);
@@ -104,7 +104,7 @@ const updateFormType = (e) => {
 </script>
 
 <template>
-  <Head title="Clientes" />
+  <Head title="Proveedores" />
 
   <AuthenticatedLayout>
     <template #header>
@@ -162,7 +162,7 @@ const updateFormType = (e) => {
                 <WarningButton @click="openModal(0, provider)">
                   <i class="fa-solid fa-edit"></i>
                 </WarningButton>
-                <DangerButton class="ml-2" @click="deleteClient(provider)">
+                <DangerButton class="ml-2" @click="deleteProvider(provider)">
                   <i class="fa-solid fa-trash"></i>
                 </DangerButton>
               </td>

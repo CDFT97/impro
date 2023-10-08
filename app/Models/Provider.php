@@ -11,11 +11,14 @@ class Provider extends Model
 
     protected $fillable = [
         'name',
+        'last_name',
         'ci',
         'rif',
         'phone_number',
         'address',
         'email',
+        'description',
+        'company',
         'description',
     ];
 }
