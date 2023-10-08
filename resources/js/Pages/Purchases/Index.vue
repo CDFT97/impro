@@ -91,7 +91,7 @@ const deleteItem = async (purchase) => {
   }
 };
 const updateProvider = (e) => {
-  form.provider = e;
+  form.provider_id = e;
 };
 </script>
 
@@ -174,7 +174,7 @@ const updateProvider = (e) => {
           :options="providers"
           placeholder="Seleccione un proveedor"
         ></SelectInput>
-        <InputError :message="form.errors.type" class="mt-2"></InputError>
+        <InputError :message="form.errors.provider_id" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="amount_usd" value="Monto USD:"></InputLabel>
@@ -189,20 +189,6 @@ const updateProvider = (e) => {
           placeholder="Monto en divisas"
         ></TextInput>
         <InputError :message="form.errors.amount_usd" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="amount" value="Monto Bs:"></InputLabel>
-        <TextInput
-          id="amount"
-          ref="amountInput"
-          v-model="form.amount"
-          type="number"
-          min="0"
-          step="0.01"
-          class="mt-1 block w-3/4"
-          placeholder="Monto en bolivares"
-        ></TextInput>
-        <InputError :message="form.errors.amount" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="dolar_price" value="Precio Dolar:"></InputLabel>
@@ -220,6 +206,20 @@ const updateProvider = (e) => {
           :message="form.errors.dolar_price"
           class="mt-2"
         ></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="amount" value="Monto Bs:"></InputLabel>
+        <TextInput
+          id="amount"
+          ref="amountInput"
+          v-model="form.amount"
+          type="number"
+          min="0"
+          step="0.01"
+          class="mt-1 block w-3/4"
+          placeholder="Monto en bolivares"
+        ></TextInput>
+        <InputError :message="form.errors.amount" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="ci" value="Fecha:"></InputLabel>
@@ -241,10 +241,10 @@ const updateProvider = (e) => {
           rows="4"
           class="block p-2.5 w-full border-gray-500 text-sm text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-indigo-600"
           placeholder="Descripción de la compra"
-          v-model="form.phone_number"
+          v-model="form.description"
         ></textarea>
         <InputError
-          :message="form.errors.phone_number"
+          :message="form.errors.description"
           class="mt-2"
         ></InputError>
       </div>

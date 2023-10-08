@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\ProviderResource;
 use App\Models\Provider;
 use App\Models\Purchase;
@@ -16,9 +17,10 @@ class PurchaseController extends Controller
         $providers = ProviderResource::collection(Provider::all());
         return Inertia::render("Purchases/Index", compact('purchases', 'providers'));
     }
-    public function store(Request $request)
+    public function store(PurchaseRequest $request)
     {
-        //
+        Purchase::create($request->validated());
+        return back()->with('success', 'Compra registrada exitosamente');
     }
     public function update(Request $request, Purchase $purchase)
     {
