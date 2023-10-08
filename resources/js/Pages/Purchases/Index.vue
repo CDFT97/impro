@@ -12,6 +12,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
+import SelectInput from "@/Components/SelectInput.vue";
 
 const nameInput = ref(null);
 const modal = ref(false);
@@ -21,18 +22,16 @@ const id = ref("");
 
 const props = defineProps({
   purchases: [],
+  providers: [],
 });
 
 const form = useForm({
-  name: "",
-  last_name: "",
-  ci: "",
-  rif: "",
-  phone_number: "",
-  address: "",
-  email: "",
-  description : "",
-  company: "",
+  amount_usd: 0,
+  amount: 0,
+  date: "",
+  description: "",
+  dolar_price: 0,
+  provider_id: "empty",
 });
 
 const openModal = (op, provider) => {
@@ -40,10 +39,10 @@ const openModal = (op, provider) => {
   operation.value = op;
   form.reset();
   if (op == 1) {
-    title.value = "Registrar Proveedor";
+    title.value = "Registrar Compra";
   } else {
     id.value = provider.id;
-    title.value = "Editar Proveedor";
+    title.value = "Editar Compra";
     form.name = provider.name;
     form.last_name = provider.last_name;
     form.ci = provider.ci;
@@ -62,12 +61,12 @@ const closeModal = () => {
 const save = () => {
   if (operation.value == 1) {
     form.post(route("purchases.store"), {
-        onSuccess: () => closeModal(),
-    })
+      onSuccess: () => closeModal(),
+    });
   } else {
-    form.put(route("purchases.update", id.value),{
-        onSuccess: () => closeModal(),
-    })
+    form.put(route("purchases.update", id.value), {
+      onSuccess: () => closeModal(),
+    });
   }
 };
 const deleteItem = async (purchase) => {
@@ -91,23 +90,25 @@ const deleteItem = async (purchase) => {
     console.error(error);
   }
 };
-
+const updateProvider = (e) => {
+  form.provider = e;
+};
 </script>
 
 <template>
-  <Head title="Proveedores" />
+  <Head title="Compras" />
 
   <AuthenticatedLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Proveedores
+        Compras a Proveedores
       </h2>
     </template>
     <div class="py-12 border rounded-md">
-      <div class="bg-white grid v-screen ">
+      <div class="bg-white grid v-screen">
         <div class="mt-3 mb-3 flex ms-10">
           <PrimaryButton @click="openModal(true)">
-            <i class="fa-solid fa-plus-circle"></i> Registrar Proveedor
+            <i class="fa-solid fa-plus-circle"></i> Nueva Compra
           </PrimaryButton>
         </div>
       </div>
@@ -163,109 +164,89 @@ const deleteItem = async (purchase) => {
     <!-- Modal Start -->
     <Modal :show="modal" @close="closeModal">
       <h2 class="p-3 text-lg font.medium text-hray-900">{{ title }}</h2>
-      <div class="p-3 mt-1 pb-0">
-        <InputLabel for="name" value="Nombre:"></InputLabel>
-        <TextInput
-          id="name"
-          ref="nameInput"
-          v-model="form.name"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Nombre"
-        ></TextInput>
-        <InputError :message="form.errors.name" class="mt-2"></InputError>
+      <div class="p-3 pb-0">
+        <InputLabel for="provider" value="Proveedor:"></InputLabel>
+        <SelectInput
+          id="provider"
+          v-model="form.provider_id"
+          @update="updateProvider"
+          class="mt-1 block w-full"
+          :options="providers"
+          placeholder="Seleccione un proveedor"
+        ></SelectInput>
+        <InputError :message="form.errors.type" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="last_name" value="Apellido:"></InputLabel>
+        <InputLabel for="amount_usd" value="Monto USD:"></InputLabel>
         <TextInput
-          id="last_name"
-          ref="last_nameInput"
-          v-model="form.last_name"
-          type="text"
+          id="amount_usd"
+          ref="amount_usdInput"
+          v-model="form.amount_usd"
+          type="number"
+          min="0"
+          step="0.01"
           class="mt-1 block w-3/4"
-          placeholder="Apellido"
+          placeholder="Monto en divisas"
         ></TextInput>
-        <InputError :message="form.errors.last_name" class="mt-2"></InputError>
+        <InputError :message="form.errors.amount_usd" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="ci" value="Cedula:"></InputLabel>
+        <InputLabel for="amount" value="Monto Bs:"></InputLabel>
         <TextInput
-          id="ci"
-          ref="ciInput"
-          v-model="form.ci"
-          type="text"
+          id="amount"
+          ref="amountInput"
+          v-model="form.amount"
+          type="number"
+          min="0"
+          step="0.01"
           class="mt-1 block w-3/4"
-          placeholder="Cedula"
+          placeholder="Monto en bolivares"
         ></TextInput>
-        <InputError :message="form.errors.ci" class="mt-2"></InputError>
+        <InputError :message="form.errors.amount" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="ci" value="Rif:"></InputLabel>
+        <InputLabel for="dolar_price" value="Precio Dolar:"></InputLabel>
         <TextInput
-          id="rif"
-          ref="rifInput"
-          v-model="form.rif"
-          type="text"
+          id="dolar_price"
+          ref="dolar_priceInput"
+          v-model="form.dolar_price"
+          type="number"
+          min="0"
+          step="0.01"
           class="mt-1 block w-3/4"
-          placeholder="Rif"
+          placeholder="Precio del dolar"
         ></TextInput>
-        <InputError :message="form.errors.rif" class="mt-2"></InputError>
+        <InputError
+          :message="form.errors.dolar_price"
+          class="mt-2"
+        ></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="phone_number" value="Telefono:"></InputLabel>
+        <InputLabel for="ci" value="Fecha:"></InputLabel>
         <TextInput
-          id="phone_number"
-          v-model="form.phone_number"
-          type="text"
+          id="date"
+          ref="dateInput"
+          v-model="form.date"
+          type="date"
           class="mt-1 block w-3/4"
-          placeholder="Telefono"
+          placeholder="Fecha"
         ></TextInput>
-        <InputError :message="form.errors.phone_number" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="address" value="Dirección:"></InputLabel>
-        <TextInput
-          id="address"
-          ref="addressInput"
-          v-model="form.address"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Dirección"
-        ></TextInput>
-        <InputError :message="form.errors.address" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="email" value="Correo:"></InputLabel>
-        <TextInput
-          id="email"
-          v-model="form.email"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Correo"
-        ></TextInput>
-        <InputError :message="form.errors.email" class="mt-2"></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="company" value="Empresa:"></InputLabel>
-        <TextInput
-          id="company"
-          v-model="form.company"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Empresa"
-        ></TextInput>
-        <InputError :message="form.errors.company" class="mt-2"></InputError>
+        <InputError :message="form.errors.date" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="description" value="Descripción:"></InputLabel>
-        <TextInput
+
+        <textarea
           id="description"
-          v-model="form.description"
-          type="text"
-          class="mt-1 block w-3/4"
-          placeholder="Descripcion o comentario"
-        ></TextInput>
-        <InputError :message="form.errors.description" class="mt-2"></InputError>
+          rows="4"
+          class="block p-2.5 w-full border-gray-500 text-sm text-gray-900 bg-gray-50 rounded-lg border focus:ring-blue-500 focus:border-indigo-600"
+          placeholder="Descripción de la compra"
+          v-model="form.phone_number"
+        ></textarea>
+        <InputError
+          :message="form.errors.phone_number"
+          class="mt-2"
+        ></InputError>
       </div>
       <div class="p-3 mt-2">
         <PrimaryButton :disabled="form.processing" @click="save">

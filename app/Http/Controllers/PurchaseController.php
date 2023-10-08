@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProviderResource;
+use App\Models\Provider;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +13,8 @@ class PurchaseController extends Controller
     public function index()
     {
         $purchases = Purchase::with('provider')->orderBy('created_at', 'desc')->paginate(10);
-        return Inertia::render("Purchases/Index", compact('purchases'));
+        $providers = ProviderResource::collection(Provider::all());
+        return Inertia::render("Purchases/Index", compact('purchases', 'providers'));
     }
     public function store(Request $request)
     {

@@ -32,7 +32,7 @@ const form = useForm({
   phone_number: "",
   email: "",
   company: "",
-  type: 3,
+  type: "empty",
   discount: 0,
   description : ""
 });
