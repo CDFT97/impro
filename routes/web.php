@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DolarController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
 
@@ -31,7 +32,7 @@ Route::get('/', function () {
     ]);
 });
 
-
+Route::get("/update-dolar-price", [DolarController::class, 'updateDolar'])->name('dolar.update');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::get('/about', fn () => Inertia::render('About'))->name('about');
