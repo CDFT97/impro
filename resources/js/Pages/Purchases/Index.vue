@@ -13,8 +13,9 @@ import { ref } from "vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
 import SelectInput from "@/Components/SelectInput.vue";
-
-const nameInput = ref(null);
+import { useDolarStore } from "@/Stores/dolar";
+import moment from "moment"
+const dolarStore = useDolarStore();
 const modal = ref(false);
 const title = ref("");
 const operation = ref(1);
@@ -33,25 +34,22 @@ const form = useForm({
   dolar_price: 0,
   provider_id: "empty",
 });
-
-const openModal = (op, provider) => {
+const openModal = (op, purchase) => {
   modal.value = true;
   operation.value = op;
   form.reset();
   if (op == 1) {
     title.value = "Registrar Compra";
+    form.dolar_price = dolarStore.dolar_price;
   } else {
-    id.value = provider.id;
+    id.value = purchase.id;
     title.value = "Editar Compra";
-    form.name = provider.name;
-    form.last_name = provider.last_name;
-    form.ci = provider.ci;
-    form.rif = provider.rif;
-    form.phone_number = provider.phone_number;
-    form.address = provider.address;
-    form.email = provider.email;
-    form.description = provider.description;
-    form.company = provider.company;
+    form.amount_usd = purchase.amount_usd;
+    form.amount = purchase.amount;
+    form.date = purchase.date;
+    form.description = purchase.description;
+    form.dolar_price = purchase.dolar_price;
+    form.provider_id = purchase.provider_id;
   }
 };
 const closeModal = () => {
@@ -75,7 +73,7 @@ const deleteItem = async (purchase) => {
   });
   try {
     const result = await alerta.fire({
-      title: `Quiere eliminar la compra  ${provider.id}?`,
+      title: `Quiere eliminar la compra  ${purchase.id}?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -84,7 +82,7 @@ const deleteItem = async (purchase) => {
       cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancelar',
     });
     if (result.isConfirmed) {
-      form.delete(route("purchases.destroy", provider.id));
+      form.delete(route("purchases.destroy", purchase.id));
     }
   } catch (error) {
     console.error(error);
@@ -93,6 +91,14 @@ const deleteItem = async (purchase) => {
 const updateProvider = (e) => {
   form.provider_id = e;
 };
+
+const calculateTotal = () => {
+  form.amount = (form.amount_usd * form.dolar_price).toFixed(2);
+}
+
+const parseDate = (date) => {
+    return moment(date).format("DD-MM-YYYY HH:mm:ss"); 
+}
 </script>
 
 <template>
@@ -123,6 +129,7 @@ const updateProvider = (e) => {
               <th class="px-2 py-2">Monto USD</th>
               <th class="px-2 py-2">Monto Bs</th>
               <th class="px-2 py-2">Fecha</th>
+              <th class="px-2 py-2">Utl Actualización</th>
               <th class="px-2 py-2">Acciones</th>
             </tr>
           </thead>
@@ -144,6 +151,9 @@ const updateProvider = (e) => {
               </td>
               <td class="px-2 py-2">
                 {{ purchase.date }}
+              </td>
+              <td class="px-2 py-2">
+                {{ parseDate(purchase.updated_at) }}
               </td>
               <td class="px-2 py-2 flex justify-center">
                 <WarningButton @click="openModal(0, purchase)">
@@ -174,7 +184,10 @@ const updateProvider = (e) => {
           :options="providers"
           placeholder="Seleccione un proveedor"
         ></SelectInput>
-        <InputError :message="form.errors.provider_id" class="mt-2"></InputError>
+        <InputError
+          :message="form.errors.provider_id"
+          class="mt-2"
+        ></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="amount_usd" value="Monto USD:"></InputLabel>
@@ -182,6 +195,7 @@ const updateProvider = (e) => {
           id="amount_usd"
           ref="amount_usdInput"
           v-model="form.amount_usd"
+          @input="calculateTotal"
           type="number"
           min="0"
           step="0.01"
@@ -196,6 +210,7 @@ const updateProvider = (e) => {
           id="dolar_price"
           ref="dolar_priceInput"
           v-model="form.dolar_price"
+          @input="calculateTotal"
           type="number"
           min="0"
           step="0.01"
