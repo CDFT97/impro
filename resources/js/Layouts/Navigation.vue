@@ -16,7 +16,7 @@
                         fill="white"/>
                 </svg>
 
-                <span class="mx-2 text-2xl font-semibold text-white">Dashboard</span>
+                <span class="mx-2 text-2xl font-semibold text-white">IMPRO C.A</span>
             </div>
         </div>
 
