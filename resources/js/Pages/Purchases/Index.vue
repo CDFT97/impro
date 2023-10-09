@@ -139,20 +139,20 @@ const parseDate = (date) => {
               :key="purchase.id"
               class="border-t-2 border-gray-200"
             >
-              <td class="px-2 py-2">{{ purchase.id }}</td>
+              <td class="px-2 py-2 text-center">{{ purchase.id }}</td>
               <td class="px-2 py-2">
                 {{ purchase.provider.name }} - {{ purchase.provider.company }}
               </td>
-              <td class="px-2 py-2">
+              <td class="px-2 py-2 text-end">
                 {{ purchase.amount_usd }}
               </td>
-              <td class="px-2 py-2">
+              <td class="px-2 py-2 text-end">
                 {{ purchase.amount }}
               </td>
-              <td class="px-2 py-2">
+              <td class="px-2 py-2 text-center">
                 {{ purchase.date }}
               </td>
-              <td class="px-2 py-2">
+              <td class="px-2 py-2 text-center">
                 {{ parseDate(purchase.updated_at) }}
               </td>
               <td class="px-2 py-2 flex justify-center">
