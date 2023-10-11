@@ -35,4 +35,9 @@ class ProviderController extends Controller
         $provider->save();
         return back()->with("success", "Proveedor Actualizado con exito!");
     }
+    public function showPurchases(Provider $provider)
+    {
+        $purchases = $provider->purchases()->paginate(10);
+        return Inertia::render('Providers/Purchases', compact('purchases', 'provider'));
+    }
 }

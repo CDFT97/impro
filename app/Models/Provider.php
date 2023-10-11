@@ -20,4 +20,9 @@ class Provider extends Model
         'description',
         'company',
     ];
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class, 'provider_id', 'id');
+    }
 }

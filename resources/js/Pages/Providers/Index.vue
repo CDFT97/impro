@@ -12,7 +12,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
-
+import { Link } from '@inertiajs/vue3'
 const nameInput = ref(null);
 const modal = ref(false);
 const title = ref("");
@@ -150,6 +150,11 @@ const deleteProvider = async (provider) => {
               </td>
 
               <td class="px-2 py-2 flex justify-center">
+                <Link :href="route('provider.show.purchases', provider.id)" :active="route().current('provider.show.purchases')">
+                <PrimaryButton class="mr-2">
+                    <i class="fa-brands fa-shopify"></i>
+                  </PrimaryButton>
+                </Link>
                 <WarningButton @click="openModal(0, provider)">
                   <i class="fa-solid fa-edit"></i>
                 </WarningButton>

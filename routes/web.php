@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('clients', ClientController::class);
     Route::resource('providers', ProviderController::class);
     Route::resource('purchases', PurchaseController::class);
+    Route::get("provider/show-purchases/{provider}", [ProviderController::class, 'showPurchases'])->name("provider.show.purchases");
 
 });
 
