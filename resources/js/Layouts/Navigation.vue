@@ -16,7 +16,7 @@
                         fill="white"/>
                 </svg>
 
-                <span class="mx-2 text-2xl font-semibold text-white">Dashboard</span>
+                <span class="mx-2 text-2xl font-semibold text-white">IMPRO C.A</span>
             </div>
         </div>
 
@@ -47,6 +47,13 @@
                     <i class="fa-solid fa-truck"></i>
                 </template>
                 Proveedores
+            </nav-link>
+
+            <nav-link :href="route('purchases.index')" :active="route().current('purchases.index')">
+                <template #icon>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </template>
+                Compras
             </nav-link>
 
 
