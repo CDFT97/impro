@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,15 +24,16 @@ class ProductController extends Controller
             return back()->with('error', 'El producto no se puede eliminar ya que tiene ventas asociadas');
         }
     }
-    public function store(ProviderRequest $request)
+    public function store(ProductRequest $request)
     {
+        dd("store", $request->all());
         Provider::create($request->validated());
         return back()->with("success", "Proveedor Registrado con exito!");
     }
-    public function update(ProviderRequest $request, Provider $provider)
+    public function update(ProductRequest $request, Product $product)
     {
-        $provider->fill($request->validated());
-        $provider->save();
-        return back()->with("success", "Proveedor Actualizado con exito!");
+        $product->fill($request->validated());
+        $product->save();
+        return back()->with("success", "Producto Actualizado con exito!");
     }
 }

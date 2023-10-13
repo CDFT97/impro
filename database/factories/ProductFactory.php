@@ -20,7 +20,6 @@ class ProductFactory extends Factory
         $meters = [50,100,150,200,250,300,350];
         return [
             "name" => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
-            "measures" => "300 x 50",
             "material" => $materials[array_rand($materials)],
             "stock_meters" => $m = $meters[array_rand($meters)],
             "stock_quantity" => $m / 50,

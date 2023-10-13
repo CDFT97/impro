@@ -27,30 +27,30 @@ const props = defineProps({
 });
 
 const form = useForm({
-  amount_usd: 0,
-  amount: 0,
-  date: "",
+  name: "",
+  material: "",
+  stock_meters: 0,
+  stock_quantity: 0,
+  unit_price_in_dollars: 0,
   description: "",
-  dolar_price: 0,
-  provider_id: "empty",
 });
 
-const openModal = (op, purchase) => {
+const openModal = (op, product) => {
   modal.value = true;
   operation.value = op;
   form.reset();
   if (op == 1) {
-    title.value = "Registrar Compra";
+    title.value = "Registrar Producto";
     form.dolar_price = dolarStore.dolar_price;
   } else {
-    id.value = purchase.id;
-    title.value = "Editar Compra";
-    form.amount_usd = purchase.amount_usd;
-    form.amount = purchase.amount;
-    form.date = purchase.date;
-    form.description = purchase.description;
-    form.dolar_price = purchase.dolar_price;
-    form.provider_id = purchase.provider_id;
+    id.value = product.id;
+    title.value = "Editar Producto";
+    form.name = product.name;
+    form.material = product.material;
+    form.stock_meters = product.stock_meters;
+    form.stock_quantity = product.stock_quantity;
+    form.unit_price_in_dollars = product.unit_price_in_dollars;
+    form.description = product.description;
   }
 };
 const closeModal = () => {
@@ -59,11 +59,11 @@ const closeModal = () => {
 };
 const save = () => {
   if (operation.value == 1) {
-    form.post(route("purchases.store"), {
+    form.post(route("products.store"), {
       onSuccess: () => closeModal(),
     });
   } else {
-    form.put(route("purchases.update", id.value), {
+    form.put(route("products.update", id.value), {
       onSuccess: () => closeModal(),
     });
   }
@@ -96,10 +96,6 @@ const updateProvider = (e) => {
 const calculateTotal = () => {
   form.amount = (form.amount_usd * form.dolar_price).toFixed(2);
 }
-
-const parseDate = (date) => {
-    return moment(date).format("DD-MM-YYYY HH:mm:ss"); 
-}
 </script>
 
 <template>
@@ -126,7 +122,6 @@ const parseDate = (date) => {
           <thead>
             <tr class="bg-gray-100">
               <th class="px-2 py-2">Nombre</th>
-              <th class="px-2 py-2">Medidas</th>
               <th class="px-2 py-2">Material</th>
               <th class="px-2 py-2">Metros Disp.</th>
               <th class="px-2 py-2">Unidades</th>
@@ -142,9 +137,6 @@ const parseDate = (date) => {
             >
               <td class="px-2 py-2">
                 {{ product.name }}
-              </td>
-              <td class="px-2 py-2 text-end">
-                {{ product.measures }}
               </td>
               <td class="px-2 py-2 text-end">
                 {{ product.material }}
@@ -178,78 +170,73 @@ const parseDate = (date) => {
     <Modal :show="modal" @close="closeModal">
       <h2 class="p-3 text-lg font.medium text-hray-900">{{ title }}</h2>
       <div class="p-3 pb-0">
-        <InputLabel for="provider" value="Proveedor:"></InputLabel>
-        <SelectInput
-          id="provider"
-          v-model="form.provider_id"
-          @update="updateProvider"
-          class="mt-1 block w-full"
-          :options="providers"
-          placeholder="Seleccione un proveedor"
-        ></SelectInput>
-        <InputError
-          :message="form.errors.provider_id"
-          class="mt-2"
-        ></InputError>
-      </div>
-      <div class="p-3 pb-0">
-        <InputLabel for="amount_usd" value="Monto USD:"></InputLabel>
+        <InputLabel for="name" value="Nombre:"></InputLabel>
         <TextInput
-          id="amount_usd"
-          ref="amount_usdInput"
-          v-model="form.amount_usd"
+          id="name"
+          v-model="form.name"
           @input="calculateTotal"
-          type="number"
-          min="0"
-          step="0.01"
+          type="text"
           class="mt-1 block w-3/4"
-          placeholder="Monto en divisas"
+          placeholder="Nombre del producto"
         ></TextInput>
-        <InputError :message="form.errors.amount_usd" class="mt-2"></InputError>
+        <InputError :message="form.errors.name" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="dolar_price" value="Precio Dolar:"></InputLabel>
+        <InputLabel for="material" value="Material:"></InputLabel>
         <TextInput
-          id="dolar_price"
-          ref="dolar_priceInput"
-          v-model="form.dolar_price"
-          @input="calculateTotal"
-          type="number"
-          min="0"
-          step="0.01"
+          id="material"
+          ref="materialInput"
+          v-model="form.material"
+          type="text"
           class="mt-1 block w-3/4"
           placeholder="Precio del dolar"
         ></TextInput>
         <InputError
-          :message="form.errors.dolar_price"
+          :message="form.errors.material"
           class="mt-2"
         ></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="amount" value="Monto Bs:"></InputLabel>
+        <InputLabel for="stock_meters" value="Metros en existencia:"></InputLabel>
         <TextInput
-          id="amount"
-          ref="amountInput"
-          v-model="form.amount"
+          id="stock_meters"
+          ref="stock_metersInput"
+          v-model="form.stock_meters"
           type="number"
           min="0"
           step="0.01"
           class="mt-1 block w-3/4"
           placeholder="Monto en bolivares"
         ></TextInput>
-        <InputError :message="form.errors.amount" class="mt-2"></InputError>
+        <InputError :message="form.errors.stock_meters" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="ci" value="Fecha:"></InputLabel>
+        <InputLabel for="stock_quantity" value="Unidades en existencia:"></InputLabel>
         <TextInput
-          id="date"
-          ref="dateInput"
-          v-model="form.date"
-          type="date"
+          id="stock_quantity"
+          ref="stock_quantityInput"
+          v-model="form.stock_quantity"
+          type="number"
+          min="0"
+          step="0.01"
           class="mt-1 block w-3/4"
-          placeholder="Fecha"
+          placeholder="Monto en bolivares"
         ></TextInput>
-        <InputError :message="form.errors.date" class="mt-2"></InputError>
+        <InputError :message="form.errors.stock_quantity" class="mt-2"></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="unit_price_in_dollars" value="Precio Unitario $:"></InputLabel>
+        <TextInput
+          id="unit_price_in_dollars"
+          ref="unit_price_in_dollarsInput"
+          v-model="form.unit_price_in_dollars"
+          type="number"
+          min="0"
+          step="0.01"
+          class="mt-1 block w-3/4"
+          placeholder="Monto en bolivares"
+        ></TextInput>
+        <InputError :message="form.errors.unit_price_in_dollars" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="description" value="Descripción:"></InputLabel>
