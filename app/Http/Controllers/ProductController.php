@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::orderBy("updated_at", "desc")->paginate(10);
         return Inertia::render("Products/Index", compact("products"));
     }
     public function destroy(Product $product)
@@ -26,8 +26,7 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request)
     {
-        dd("store", $request->all());
-        Provider::create($request->validated());
+        Product::create($request->validated());
         return back()->with("success", "Proveedor Registrado con exito!");
     }
     public function update(ProductRequest $request, Product $product)
