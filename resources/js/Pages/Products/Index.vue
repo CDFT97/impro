@@ -12,10 +12,10 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import { useDolarStore } from "@/Stores/dolar";
-import moment from "moment"
+import { useAlertsStore } from "@/Stores/alerts";
 
+const alertsStore = useAlertsStore();
 const dolarStore = useDolarStore();
 const modal = ref(false);
 const title = ref("");
@@ -34,7 +34,10 @@ const form = useForm({
   unit_price_in_dollars: 0,
   description: "",
 });
-
+const handleAlertByStock = (item) => {
+  const message = `El producto ${item} se encuentra en 10 metros o menos!`
+  alertsStore.warning(message);
+}
 const openModal = (op, product) => {
   modal.value = true;
   operation.value = op;
@@ -142,9 +145,10 @@ const calculateTotal = () => {
                 {{ product.material }}
               </td>
               <td class="px-2 py-2 text-center">
-                {{ product.stock_meters }}
+                <span v-if="product.stock_meters <= 10" class="bg-red-500 text-white text-sm font-medium mr-2 px-2.5 py-0.5 rounded ">{{ product.stock_meters }}</span>
+                <span v-else>{{ product.stock_meters }}</span>
               </td>
-              <td class="px-2 py-2 text-center">
+              <td class="px-2 py-2 text-center" >
                 {{ product.stock_quantity }}
               </td>
               <td class="px-2 py-2 text-center">
