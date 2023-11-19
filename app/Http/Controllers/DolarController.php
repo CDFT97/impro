@@ -16,10 +16,10 @@ class DolarController extends Controller
 
     public function updateDolar()
     {
-        $response = Http::get('https://pydolarvenezuela-api.vercel.app/api/v1/dollar/bcv');
+        $response = Http::get('https://pydolarvenezuela-api.vercel.app/api/v1/dollar/unit/bcv');
         if($response->successful()) {
             $data = $response->object();
-            $dolar = Dolar::first()->update(['amount' => floatval(substr($data->monitors->usd->price,0, 5))]);
+            $dolar = Dolar::first()->update(['amount' => floatval(substr($data->price,0, 5))]);
             return back()->with("success", "Valor del Dolar actualizado!");
         } 
         return back()->with("error", "Error al actualizar el valor del dolar");

@@ -30,14 +30,18 @@ const form = useForm({
   name: "",
   material: "",
   stock_meters: 0,
-  stock_quantity: 0,
+  // stock_quantity: 0,
   unit_price_in_dollars: 0,
   description: "",
 });
-const handleAlertByStock = (item) => {
-  const message = `El producto ${item} se encuentra en 10 metros o menos!`
-  alertsStore.warning(message);
+const handleAlertByStock = () => {
+  props.products.data.map(item => {
+    if(item.stock_meters <= 10){
+      alertsStore.warning(`El producto ${item.name} tiene ${item.stock_meters} metros de stock`)
+    }
+  })
 }
+handleAlertByStock()
 const openModal = (op, product) => {
   modal.value = true;
   operation.value = op;
@@ -51,7 +55,7 @@ const openModal = (op, product) => {
     form.name = product.name;
     form.material = product.material;
     form.stock_meters = product.stock_meters;
-    form.stock_quantity = product.stock_quantity;
+    // form.stock_quantity = product.stock_quantity;
     form.unit_price_in_dollars = product.unit_price_in_dollars;
     form.description = product.description;
   }
@@ -110,7 +114,7 @@ const calculateTotal = () => {
         Lista de Productos
       </h2>
     </template>
-    <div class="py-12 border rounded-md">
+    <div class="py-1 border rounded-md">
       <div class="bg-white grid v-screen">
         <div class="mt-3 mb-3 flex ms-10">
           <PrimaryButton @click="openModal(true)">
@@ -127,7 +131,7 @@ const calculateTotal = () => {
               <th class="px-2 py-2">Nombre</th>
               <th class="px-2 py-2">Material</th>
               <th class="px-2 py-2">Metros Disp.</th>
-              <th class="px-2 py-2">Unidades</th>
+              <!-- <th class="px-2 py-2">Unidades</th> -->
               <th class="px-2 py-2">Precio Unitario $</th>
               <th class="px-2 py-2">Acciones</th>
             </tr>
@@ -148,9 +152,9 @@ const calculateTotal = () => {
                 <span v-if="product.stock_meters <= 10" class="bg-red-500 text-white text-sm font-medium mr-2 px-2.5 py-0.5 rounded ">{{ product.stock_meters }}</span>
                 <span v-else>{{ product.stock_meters }}</span>
               </td>
-              <td class="px-2 py-2 text-center" >
+              <!-- <td class="px-2 py-2 text-center" >
                 {{ product.stock_quantity }}
-              </td>
+              </td> -->
               <td class="px-2 py-2 text-center">
                 {{ product.unit_price_in_dollars }}
               </td>
@@ -214,7 +218,7 @@ const calculateTotal = () => {
         ></TextInput>
         <InputError :message="form.errors.stock_meters" class="mt-2"></InputError>
       </div>
-      <div class="p-3 pb-0">
+      <!-- <div class="p-3 pb-0">
         <InputLabel for="stock_quantity" value="Unidades en existencia:"></InputLabel>
         <TextInput
           id="stock_quantity"
@@ -227,7 +231,7 @@ const calculateTotal = () => {
           placeholder="Monto en bolivares"
         ></TextInput>
         <InputError :message="form.errors.stock_quantity" class="mt-2"></InputError>
-      </div>
+      </div> -->
       <div class="p-3 pb-0">
         <InputLabel for="unit_price_in_dollars" value="Precio Unitario $:"></InputLabel>
         <TextInput

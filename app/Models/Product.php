@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Product extends Model
 {
@@ -17,4 +18,9 @@ class Product extends Model
         "unit_price_in_dollars",
         "description",
     ];
+
+    public function orders(): Relation
+    {
+        return $this->belongsToMany(Order::class, "order_product");
+    }
 }

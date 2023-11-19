@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
             "name" => "required",
             "material" => "required",
             "stock_meters" => "required",
-            "stock_quantity" => "required",
+            // "stock_quantity" => "required",
             "unit_price_in_dollars" => "required",
             "description" => "required",
         ];

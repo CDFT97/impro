@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name",100);
             $table->string("material",50);
             $table->decimal("stock_meters", 8,2);
-            $table->integer("stock_quantity");
+            $table->integer("stock_quantity")->nullable();
             $table->decimal("unit_price_in_dollars", 8,2);
             $table->string("description", 255);
             $table->timestamps();
