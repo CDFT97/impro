@@ -83,7 +83,7 @@
                 Inventario
             </nav-link>
 
-            <nav-link :href="route('users.index')" :active="route().current('users.index')">
+            <!-- <nav-link :href="route('users.index')" :active="route().current('users.index')">
                 <template #icon>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                          xmlns="http://www.w3.org/2000/svg">
@@ -92,7 +92,7 @@
                     </svg>
                 </template>
                 Users
-            </nav-link>
+            </nav-link> -->
 
         </nav>
     </div>
