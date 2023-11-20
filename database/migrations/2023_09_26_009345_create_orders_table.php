@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double('amount');
             $table->string('hash')->nullable();
             $table->tinyInteger('status')->nullable()->comment('0 - Pending, 1 - Completed,2 - Canceled');
-            $table->string('vouche');
+            $table->string('voucher')->nullable();
             $table->timestamps();
         });
     }
