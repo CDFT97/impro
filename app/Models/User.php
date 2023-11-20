@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -39,5 +40,10 @@ class User extends Authenticatable
     }
     public function isAdmin() {
         return $this->rol == User::ADMIN ? true : false;
+    }
+
+    public function orders(): Relation
+    {
+        return $this->hasMany(Order::class);
     }
 }

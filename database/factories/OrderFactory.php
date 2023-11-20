@@ -18,7 +18,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id" => $this->faker->numberBetween(2, 11),
+            "client_id" => $this->faker->numberBetween(1, 11),
             "amount" => 0,
             "hash" => $this->faker->uuid(),
             "status" => Order::STATUS["Pending"],

@@ -25,7 +25,10 @@ class Client extends Model
         0 => "Normal",
         1 => "Publicista"
     ];
-
+    public function fullName()
+    {
+        return $this->name . " " . $this->last_name;
+    }
     // protected function getTypeAttribute()
     // {
     //     return Client::TYPE[$this->attributes['type']];

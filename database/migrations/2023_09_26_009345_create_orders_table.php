@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->comment('ID del usuario al que pertenece');
-            $table->double('amount');
+            $table->foreignId('client_id')->references('id')->on('clients')->comment('ID del cliente al que pertenece');
+            $table->double('amount')->default(0.00);
             $table->string('hash')->nullable();
             $table->tinyInteger('status')->nullable()->comment('0 - Pending, 1 - Completed,2 - Canceled');
             $table->string('voucher')->nullable();

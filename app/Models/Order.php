@@ -10,12 +10,17 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["user_id", "amount", "hash", 'status', 'voucher'];
+    protected $fillable = ["client_id", "amount", "hash", 'status', 'voucher'];
 
     const STATUS = ["Pending" => 0, "Completed" => 1, "Canceled" => 2];
 
     public function products(): Relation
     {
         return $this->belongsToMany(Product::class, "order_product")->withPivot('units', 'quantity');
+    }
+
+    public function client(): Relation
+    {
+        return $this->belongsTo(Client::class, "client_id");
     }
 }
