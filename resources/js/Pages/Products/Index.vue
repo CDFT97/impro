@@ -35,13 +35,14 @@ const form = useForm({
   description: "",
 });
 const handleAlertByStock = () => {
-  props.products.data.map(item => {
-    if(item.stock_meters <= 10){
-      alertsStore.warning(`El producto ${item.name} tiene ${item.stock_meters} metros de stock`)
-    }
-  })
-}
-handleAlertByStock()
+  const low_stock_products = props.products.data.filter(
+    (item) => item.stock_meters <= 10
+  );
+  if (low_stock_products.length > 0) {
+    alertsStore.warning(`Existen productos con poca existencia!`);
+  }
+};
+handleAlertByStock();
 const openModal = (op, product) => {
   modal.value = true;
   operation.value = op;
@@ -102,7 +103,7 @@ const updateProvider = (e) => {
 
 const calculateTotal = () => {
   form.amount = (form.amount_usd * form.dolar_price).toFixed(2);
-}
+};
 </script>
 
 <template>
@@ -149,7 +150,11 @@ const calculateTotal = () => {
                 {{ product.material }}
               </td>
               <td class="px-2 py-2 text-center">
-                <span v-if="product.stock_meters <= 10" class="bg-red-500 text-white text-sm font-medium mr-2 px-2.5 py-0.5 rounded ">{{ product.stock_meters }}</span>
+                <span
+                  v-if="product.stock_meters <= 10"
+                  class="bg-red-500 text-white text-sm font-medium mr-2 px-2.5 py-0.5 rounded"
+                  >{{ product.stock_meters }}</span
+                >
                 <span v-else>{{ product.stock_meters }}</span>
               </td>
               <!-- <td class="px-2 py-2 text-center" >
@@ -199,13 +204,13 @@ const calculateTotal = () => {
           class="mt-1 block w-3/4"
           placeholder="Precio del dolar"
         ></TextInput>
-        <InputError
-          :message="form.errors.material"
-          class="mt-2"
-        ></InputError>
+        <InputError :message="form.errors.material" class="mt-2"></InputError>
       </div>
       <div class="p-3 pb-0">
-        <InputLabel for="stock_meters" value="Metros en existencia:"></InputLabel>
+        <InputLabel
+          for="stock_meters"
+          value="Metros en existencia:"
+        ></InputLabel>
         <TextInput
           id="stock_meters"
           ref="stock_metersInput"
@@ -216,7 +221,10 @@ const calculateTotal = () => {
           class="mt-1 block w-3/4"
           placeholder="Monto en bolivares"
         ></TextInput>
-        <InputError :message="form.errors.stock_meters" class="mt-2"></InputError>
+        <InputError
+          :message="form.errors.stock_meters"
+          class="mt-2"
+        ></InputError>
       </div>
       <!-- <div class="p-3 pb-0">
         <InputLabel for="stock_quantity" value="Unidades en existencia:"></InputLabel>
@@ -233,7 +241,10 @@ const calculateTotal = () => {
         <InputError :message="form.errors.stock_quantity" class="mt-2"></InputError>
       </div> -->
       <div class="p-3 pb-0">
-        <InputLabel for="unit_price_in_dollars" value="Precio Unitario $:"></InputLabel>
+        <InputLabel
+          for="unit_price_in_dollars"
+          value="Precio Unitario $:"
+        ></InputLabel>
         <TextInput
           id="unit_price_in_dollars"
           ref="unit_price_in_dollarsInput"
@@ -244,7 +255,10 @@ const calculateTotal = () => {
           class="mt-1 block w-3/4"
           placeholder="Monto en bolivares"
         ></TextInput>
-        <InputError :message="form.errors.unit_price_in_dollars" class="mt-2"></InputError>
+        <InputError
+          :message="form.errors.unit_price_in_dollars"
+          class="mt-2"
+        ></InputError>
       </div>
       <div class="p-3 pb-0">
         <InputLabel for="description" value="Descripción:"></InputLabel>

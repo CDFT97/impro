@@ -110,7 +110,7 @@ const parseDate = (date) => {
         Compras a Proveedores
       </h2>
     </template>
-    <div class="py-12 border rounded-md">
+    <div class="py-1 border rounded-md">
       <div class="bg-white grid v-screen">
         <div class="mt-3 mb-3 flex ms-10">
           <PrimaryButton @click="openModal(true)">

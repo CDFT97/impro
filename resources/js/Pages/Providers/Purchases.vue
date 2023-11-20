@@ -24,7 +24,7 @@ const parseDate = (date) => {
         Compras al Proveedor {{ provider.name }} {{ provider.last_name }}
       </h2>
     </template>
-    <div class="py-12 border rounded-md">
+    <div class="py-1 border rounded-md">
       <div
         class="bg-white grid v-screen place-items-center overflow-x-auto py-3"
       >
