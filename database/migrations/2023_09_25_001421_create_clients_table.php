@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('company',80);
             $table->tinyInteger('type')->comment("0 - Normal, 1 - Publicista");
             $table->integer('discount')->nullable()->comment("% de descuento");
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

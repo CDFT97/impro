@@ -34,7 +34,7 @@ const form = useForm({
   company: "",
   type: "empty",
   discount: 0,
-  description : ""
+  // description : ""
 });
 
 const openModal = (op, client) => {
@@ -55,7 +55,7 @@ const openModal = (op, client) => {
     form.email = client.email;
     form.company = client.company;
     form.type = client.type
-    form.description = client.description
+    // form.description = client.description
     if(client.type == 1) {
       form.discount = client.discount
     }
@@ -109,7 +109,7 @@ const updateFormType = (e) => {
   <AuthenticatedLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Clientes
+        Clientes / Publicistas
       </h2>
     </template>
     <div class="py-1 border rounded-md">
@@ -258,7 +258,7 @@ const updateFormType = (e) => {
         ></TextInput>
         <InputError :message="form.errors.company" class="mt-2"></InputError>
       </div>
-      <div class="p-3 pb-0">
+      <!-- <div class="p-3 pb-0">
         <InputLabel for="description" value="Descripción:"></InputLabel>
         <TextInput
           id="description"
@@ -268,7 +268,7 @@ const updateFormType = (e) => {
           placeholder="Descripcion o comentario"
         ></TextInput>
         <InputError :message="form.errors.description" class="mt-2"></InputError>
-      </div>
+      </div> -->
       <div class="p-3 pb-0">
         <InputLabel for="type" value="Tipo:"></InputLabel>
         <SelectInput

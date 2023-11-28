@@ -31,7 +31,7 @@ class ClientRequest extends FormRequest
             'company' => 'required',
             'type' => [Rule::in([0,1])],
             'discount' => 'required_if:type,1',
-            'description' => 'required'
+            // 'description' => 'required'
         ];
 
         if($this->method() === 'PUT'){
