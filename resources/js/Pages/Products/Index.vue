@@ -202,7 +202,7 @@ const calculateTotal = () => {
           v-model="form.material"
           type="text"
           class="mt-1 block w-3/4"
-          placeholder="Precio del dolar"
+          placeholder="Material "
         ></TextInput>
         <InputError :message="form.errors.material" class="mt-2"></InputError>
       </div>

@@ -3,12 +3,11 @@
 
     <GuestLayout>
         <Link href="/" class="flex justify-center items-center mb-4">
-            <ApplicationLogo class="w-20 h-20 text-gray-500 fill-current" />
+            <ApplicationLogo class="h-20 w-full text-gray-500 fill-current" />
         </Link>
 
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
+            Olvió su contraseña? No hay problema. Ingrese su correo y le enviaremos un link para restablecer su contraseña.
         </div>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
@@ -17,14 +16,14 @@
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Correo" />
                 <TextInput id="email" type="email" class="block mt-1 w-full" v-model="form.email" required autofocus autocomplete="username" />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="flex justify-end items-center mt-4">
                 <PrimaryButton class="w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    Restablecer contraseña
                 </PrimaryButton>
             </div>
         </form>

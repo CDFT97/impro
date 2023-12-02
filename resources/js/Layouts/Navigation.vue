@@ -6,7 +6,7 @@
          class="overflow-y-auto fixed inset-y-0 left-0 z-30 w-64 bg-green-700 transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0 ">
         <div class="flex justify-center items-center mt-8">
             <div class="flex items-center rounded-lg bg-white py-2 px-3">
-                <img src="/img/logo.svg" width="200" height="50" alt="" class="logo_normal">
+                <img src="/img/logo.svg" width="200" height="50" alt="logo_empresa">
             </div>
         </div>
 
