@@ -31,6 +31,17 @@ class OrderController extends Controller
         return Inertia::render('Orders/History', compact("orders"));
     }
 
+    public function historySearch(Request $request)
+    {
+        $request->validate(["ci" => "required|exists:clients,ci"]);
+
+        $orders = Order::where("status", "!=" , Order::STATUS["Pending"])->whereHas("client", function($q) use($request){
+            $q->where("ci", $request->ci);
+        })->orderBy("created_at", "desc")->paginate(10);
+
+        return Inertia::render('Orders/History', compact("orders"));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

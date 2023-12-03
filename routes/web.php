@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post("/orders/add-product/{order}", [OrderController::class, 'addProduct'])->name("orders.add.product");
     Route::post("/orders/remove-product/{order}", [OrderController::class, 'removeProduct'])->name("orders.remove.product");
     Route::get("/orders/history", [OrderController::class, 'history'])->name('orders.history');
+    Route::post("/orders/history/search", [OrderController::class, 'historySearch'])->name('orders.history.search');
     Route::resource('orders', OrderController::class);
     Route::get("provider/show-purchases/{provider}", [ProviderController::class, 'showPurchases'])->name("provider.show.purchases");
 
