@@ -10,11 +10,10 @@ import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import Modal from "@/Components/Modal.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Swal from "sweetalert2";
 import moment from "moment";
 import { useDolarStore } from "@/Stores/dolar";
-import { useAlertsStore } from "@/Stores/alerts";
 
 const dolarStore = useDolarStore();
 const props = defineProps({
@@ -39,6 +38,11 @@ const form = useForm({
   hash: props.order.hash,
 });
 
+onMounted(() => {
+  form.description = props.order.description;
+  form.status = props.order.status;
+  form.hash = props.order.hash;
+})
 const removeItem = async (product) => {
   const alerta = Swal.mixin({
     buttonsStyling: true,
@@ -96,7 +100,6 @@ const parseDate = (date) => {
 const HandleSubmit = () => {
   form.put(route("orders.update", props.order.id), {
     onSuccess: () => {
-      form.reset();
     },
   });
 };

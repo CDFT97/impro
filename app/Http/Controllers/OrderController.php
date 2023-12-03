@@ -20,9 +20,15 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::where("status", Order::STATUS["Pending"])->with("client")->get();
+        $orders = Order::where("status", Order::STATUS["Pending"])->get();
         $clients = ClientListResource::collection(Client::all());
         return Inertia::render('Orders/Pending', compact("orders", 'clients'));
+    }
+
+    public function history()
+    {
+        $orders = Order::where("status", "!=" , Order::STATUS["Pending"])->orderBy("created_at", "desc")->paginate(10);
+        return Inertia::render('Orders/History', compact("orders"));
     }
 
     public function store(Request $request)
@@ -33,7 +39,7 @@ class OrderController extends Controller
             'client_id.exists' => 'Por favor seleccione un cliente',
         ]);
 
-        $order = Order::create(["client_id" => $request->client_id]);
+        $order = Order::create(["client_id" => $request->client_id, 'description' => ""]);
 
         return redirect()->route("orders.show", $order);
     }
@@ -54,7 +60,7 @@ class OrderController extends Controller
                 // $order->products()->detach($product->id);
             }
         }
-        return back()->with("success", "Se actualizo correctamente la orden");
+        return redirect()->back()->with("success", "Se actualizo correctamente la orden");
     }
 
     public function addProduct(Order $order, OrderProductRequest $request)
