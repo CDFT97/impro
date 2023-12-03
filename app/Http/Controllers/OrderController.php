@@ -47,6 +47,13 @@ class OrderController extends Controller
     public function update(OrderUpdateRequest $request, Order $order)
     {
         $order->update($request->validated());
+        if($request->status == Order::STATUS["Canceled"]) {
+            foreach ($order->products as $product) {
+                $product->stock_meters += $product->pivot->m * $product->pivot->quantity;
+                $product->save();
+                // $order->products()->detach($product->id);
+            }
+        }
         return back()->with("success", "Se actualizo correctamente la orden");
     }
 
