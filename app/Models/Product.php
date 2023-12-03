@@ -19,6 +19,8 @@ class Product extends Model
         "description",
     ];
 
+    // protected $with = ["orders"];
+
     public function orders(): Relation
     {
         return $this->belongsToMany(Order::class, "order_product");

@@ -49,14 +49,21 @@ Route::middleware('auth')->group(function () {
     Route::resource('clients', ClientController::class);
     Route::resource('providers', ProviderController::class);
     Route::resource('purchases', PurchaseController::class);
+    Route::get('products/history', [ProductController::class, 'productHistory'])->name('products.history');
+    Route::get('products/history/search', function () {
+        return redirect()->route('products.history');
+    });
+    Route::post('products/history/search', [ProductController::class, 'productHistorySearch'])->name('products.history.search');
     Route::resource('products', ProductController::class);
     Route::post("/orders/add-product/{order}", [OrderController::class, 'addProduct'])->name("orders.add.product");
     Route::post("/orders/remove-product/{order}", [OrderController::class, 'removeProduct'])->name("orders.remove.product");
     Route::get("/orders/history", [OrderController::class, 'history'])->name('orders.history');
+    Route::get("/orders/history/search", function () {
+        return redirect()->route('orders.history');
+    });
     Route::post("/orders/history/search", [OrderController::class, 'historySearch'])->name('orders.history.search');
     Route::resource('orders', OrderController::class);
     Route::get("provider/show-purchases/{provider}", [ProviderController::class, 'showPurchases'])->name("provider.show.purchases");
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

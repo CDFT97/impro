@@ -68,6 +68,12 @@
                             <Link class="w-full" :href="route('orders.history')" >Historial</Link>
                         </li>
                     </ul>
+                    <ul class="overflow-hidden p-2 mx-4 mt-2 space-y-2 text-sm font-medium text-white bg-gray-700 bg-opacity-50 rounded-md shadow-inner"
+                        aria-label="submenu">
+                        <li class="px-2 py-1 transition-colors duration-150">
+                            <Link class="w-full" :href="route('products.history')" >Historial Material</Link>
+                        </li>
+                    </ul>
                 </div>
             </transition>
             <!-- End dos niveles -->

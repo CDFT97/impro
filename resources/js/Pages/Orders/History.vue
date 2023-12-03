@@ -12,8 +12,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-  ci: ""
-})
+  ci: "",
+});
 const setStatus = (status) => {
   if (status == 1) return "Confirmada";
   else return "Cancelada";
@@ -25,7 +25,7 @@ const parseDate = (date) => {
 
 const handleSubmitSearch = () => {
   form.post(route("orders.history.search"));
-}
+};
 </script>
 
 <template>
@@ -41,13 +41,13 @@ const handleSubmitSearch = () => {
       <div class="bg-white grid v-screen">
         <div class="mt-3 mb-3 flex ms-10">
           <form class="flex w-1/3" @submit.prevent="handleSubmitSearch">
-            <TextInput 
-              type="text" 
-              class="mr-2" 
-              placeholder="Cedula de cliente / publicista" 
+            <TextInput
+              type="text"
+              class="mr-2"
+              placeholder="Cedula de cliente / publicista"
               v-model="form.ci"
               required
-              />
+            />
 
             <PrimaryButton class="mt-1 ms-4">
               <i class="fa-solid fa-magnifying-glass"></i>
@@ -58,7 +58,6 @@ const handleSubmitSearch = () => {
                 <i class="fa-solid fa-rotate-left"></i>
               </SecondaryButton>
             </Link>
-
           </form>
         </div>
       </div>
@@ -75,6 +74,7 @@ const handleSubmitSearch = () => {
               <th class="px-2 py-2">Estado</th>
               <th class="px-2 py-2">Monto</th>
               <th class="px-2 py-2">Fecha</th>
+              <th class="px-2 py-2">Detalles</th>
             </tr>
           </thead>
           <tbody>
@@ -95,7 +95,7 @@ const handleSubmitSearch = () => {
               <td class="px-2 py-2 text-center">
                 {{ order.description }}
               </td>
-              <td class="px-2 py-2 text-center">
+              <td class="px-2 py-2">
                 {{ setStatus(order.status) }}
               </td>
               <td class="px-2 py-2 text-center">
@@ -103,6 +103,16 @@ const handleSubmitSearch = () => {
               </td>
               <td class="px-2 py-2 flex justify-center">
                 {{ parseDate(order.created_at) }}
+              </td>
+              <td class="px-2 py-2 justify-center">
+                <Link
+                  :href="route('orders.show', order.id)"
+                  class="mt-1 ms-4 flex"
+                >
+                  <SecondaryButton>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </SecondaryButton>
+                </Link>
               </td>
             </tr>
           </tbody>

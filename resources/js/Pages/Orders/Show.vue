@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import WarningButton from "@/Components/WarningButton.vue";
+import ImageGallery from "@/Components/ImageGallery.vue"
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -42,7 +42,7 @@ onMounted(() => {
   form.description = props.order.description;
   form.status = props.order.status;
   form.hash = props.order.hash;
-})
+});
 const removeItem = async (product) => {
   const alerta = Swal.mixin({
     buttonsStyling: true,
@@ -99,8 +99,7 @@ const parseDate = (date) => {
 
 const HandleSubmit = () => {
   form.put(route("orders.update", props.order.id), {
-    onSuccess: () => {
-    },
+    onSuccess: () => {},
   });
 };
 
@@ -285,8 +284,11 @@ const updateFormStatus = (status) => {
             </tr>
           </tbody>
         </table>
+        <ImageGallery></ImageGallery>
       </div>
     </div>
+
+
     <!-- Modal Start -->
     <Modal :show="showModal" @close="closeModal">
       <h2 class="p-3 text-lg font.medium text-hray-900">Agregar Producto</h2>
