@@ -15,9 +15,7 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import { useDolarStore } from "@/Stores/dolar";
 import { useAlertsStore } from "@/Stores/alerts";
-import axios from "axios";
 
-const alertsStore = useAlertsStore();
 const dolarStore = useDolarStore();
 const props = defineProps({
   order: Object,
@@ -25,8 +23,6 @@ const props = defineProps({
 });
 const showModal = ref(false);
 const form = useForm({
-  p_unit_usd: 0,
-  p_unit_bs: 0,
   product_id: "empty",
   p_unit_usd: 0,
   p_unit_bs: 0,
@@ -43,21 +39,13 @@ const form = useForm({
   hash: props.order.hash,
 });
 
-// const orderFormData = ref({
-//   id: props.order.id,
-//   client_id: props.order.client_id,
-//   description: "",
-//   status: props.order.status,
-//   hash: "",
-// });
-
-const removeItem = async (order) => {
+const removeItem = async (product) => {
   const alerta = Swal.mixin({
     buttonsStyling: true,
   });
   try {
     const result = await alerta.fire({
-      title: `Quiere eliminar la orden  ${order.id}?`,
+      title: `Quiere remover este producto de la orden:  ${product.name}?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -66,7 +54,23 @@ const removeItem = async (order) => {
       cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancelar',
     });
     if (result.isConfirmed) {
-      form.delete(route("orders.destroy", order.id));
+      console.log(product.pivot);
+      form.dollar_price = product.pivot.dollar_price;
+      form.format = product.pivot.format;
+      form.m = product.pivot.m;
+      form.m2 = product.pivot.m2;
+      form.product_id = product.id;
+      form.quantity = product.pivot.quantity;
+      form.p_total_bs = product.pivot.total_price_bs;
+      form.p_total_usd = product.pivot.total_price_usd;
+      form.p_unit_bs = product.pivot.unit_price_bs;
+      form.p_unit_usd = product.pivot.unit_price_usd;
+
+      form.post(route("orders.remove.product", props.order.id), {
+        onSuccess: () => {
+          form.reset();
+        },
+      });
     }
   } catch (error) {
     console.error(error);
@@ -83,23 +87,18 @@ const openModal = (edit = false) => {
 
 const closeModal = () => {
   showModal.value = false;
+  form.reset();
 };
 const parseDate = (date) => {
   return moment(date).format("DD-MM-YYYY");
 };
 
-const HandleSubmit = async () => {
-
-
-  form.put(route("orders.update", props.order.id),{});
-  // try {
-  //   await axios.put(route("orders.update", props.order.id), orderFormData);
-  //   alertsStore.success("Orden actualizada con exito");
-  //   location.reload();
-  // } catch (error) {
-  //   console.error(error);
-  //   alertsStore.error("Ha ocurrido un error contacte con el administrador");
-  // }
+const HandleSubmit = () => {
+  form.put(route("orders.update", props.order.id), {
+    onSuccess: () => {
+      form.reset();
+    },
+  });
 };
 
 const updateProduct = (e) => {
@@ -131,8 +130,8 @@ const calculateTotalbs = () => {
   form.p_total_bs = (form.p_total_usd * dolarStore.getDolar).toFixed(2);
 };
 
-const save = () => {
-  form.put(route("orders.update", props.order.id), {
+const addProductForm = () => {
+  form.post(route("orders.add.product", props.order.id), {
     onSuccess: () => {
       closeModal();
     },
@@ -140,9 +139,8 @@ const save = () => {
 };
 
 const updateFormStatus = (status) => {
-  // orderFormData.value.status = status;
   form.status = status;
-}
+};
 </script>
 
 <template>
@@ -196,9 +194,10 @@ const updateFormStatus = (status) => {
                 :options="[
                   { id: 0, name: 'Pendiente' },
                   { id: 1, name: 'Completada' },
-                  { id: 2, name: 'Cancelada' }
+                  { id: 2, name: 'Cancelada' },
                 ]"
                 placeholder="Seleccione el estado de la orden"
+                :disabled="props.order.status != 0 ? true : false"
               ></SelectInput>
             </div>
             <div class="sm:w-1/5 w-full mx-1">
@@ -211,13 +210,17 @@ const updateFormStatus = (status) => {
                 disabled
               />
             </div>
-            <PrimaryButton class="ms-1 sm:ms-2 sm:mt-6 mt-2 sm:w-1/6 w-full">
+            <PrimaryButton
+              v-if="props.order.status == 0"
+              class="ms-1 sm:ms-2 sm:mt-6 mt-2 sm:w-1/6 w-full"
+            >
               Guardar
             </PrimaryButton>
           </form>
         </div>
         <div class="mt-3 mb-1 block ms-4 flex-wrap sm:flex">
-          <PrimaryButton v-if="props.order.status == 0"
+          <PrimaryButton
+            v-if="props.order.status == 0"
             @click="openModal(false)"
             class="ms-4 sm:ms-1 w-52 sm:w-1/6"
           >
@@ -251,15 +254,28 @@ const updateFormStatus = (status) => {
               :key="product.id"
               class="border-t-2 border-gray-200"
             >
-              <td class="px-2 py-2 text-center">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
-              <td class="px-2 py-2">{{ product.id }}</td>
+              <td class="px-2 py-2 text-center">{{ product.name }}</td>
+              <td class="px-2 py-2 text-center">{{ product.pivot.format }}</td>
+              <td class="px-2 py-2 text-center">
+                {{ product.pivot.quantity }}
+              </td>
+              <td class="px-2 py-2 text-center">{{ product.pivot.m2 }}</td>
+              <td class="px-2 py-2 text-center">{{ product.pivot.m }}</td>
+              <td class="px-2 py-2 text-center">
+                {{ (product.pivot.m2 * product.pivot.m).toFixed(2) }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ product.pivot.unit_price_usd }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ product.pivot.total_price_usd }}
+              </td>
               <td class="px-2 py-2 flex justify-center">
-                <DangerButton class="ml-2" @click="deleteItem(product)">
+                <DangerButton
+                  v-if="props.order.status === 0 ? true : false"
+                  class="ml-2"
+                  @click="removeItem(product)"
+                >
                   <i class="fa-solid fa-trash"></i>
                 </DangerButton>
               </td>
@@ -271,7 +287,7 @@ const updateFormStatus = (status) => {
     <!-- Modal Start -->
     <Modal :show="showModal" @close="closeModal">
       <h2 class="p-3 text-lg font.medium text-hray-900">Agregar Producto</h2>
-      <form @submit.prevent="HandleSubmit">
+      <form @submit.prevent="addProductForm">
         <div class="p-3 pb-0">
           <InputLabel for="client_id" value="Productos:"></InputLabel>
           <SelectInput
@@ -446,8 +462,8 @@ const updateFormStatus = (status) => {
         </div>
 
         <div class="p-3 mt-2">
-          <PrimaryButton :disabled="form.processing" @click="save">
-            <i class="fa-solid fa-save"></i> Crear
+          <PrimaryButton :disabled="form.processing">
+            <i class="fa-solid fa-save"></i> Agregar
           </PrimaryButton>
           <SecondaryButton
             class="ml-3"

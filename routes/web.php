@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('providers', ProviderController::class);
     Route::resource('purchases', PurchaseController::class);
     Route::resource('products', ProductController::class);
+    Route::post("/orders/add-product/{order}", [OrderController::class, 'addProduct'])->name("orders.add.product");
+    Route::post("/orders/remove-product/{order}", [OrderController::class, 'removeProduct'])->name("orders.remove.product");
     Route::resource('orders', OrderController::class);
     Route::get("provider/show-purchases/{provider}", [ProviderController::class, 'showPurchases'])->name("provider.show.purchases");
 
