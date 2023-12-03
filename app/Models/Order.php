@@ -10,13 +10,15 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["client_id", "amount", "hash", 'status', 'voucher'];
+    protected $fillable = ["client_id", "amount", "hash", 'status', 'voucher', 'description'];
+
+    protected $with = ["products", "client"];
 
     const STATUS = ["Pending" => 0, "Completed" => 1, "Canceled" => 2];
 
     public function products(): Relation
     {
-        return $this->belongsToMany(Product::class, "order_product")->withPivot('units', 'quantity');
+        return $this->belongsToMany(Product::class, "order_product")->withPivot("dollar_price", "unit_price_usd", "unit_price_bs", "format", "quantity", "m", "m2", "total_price_usd", "total_price_bs");
     }
 
     public function client(): Relation

@@ -17,6 +17,7 @@ class ProductListResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => "{$this->name} - {$this->material} - {$this->stock_meters}",
+            "unit_price_in_dollars" => $this->unit_price_in_dollars
         ];
     }
 }

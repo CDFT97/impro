@@ -15,8 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
-            $table->integer("units")->default(0)->comment("Productos vendidos por unidad");
-            $table->decimal("quantity", 10, 2)->default(0.00)->comment("Productos vendidos por metro o centimetros");
+            $table->decimal("dollar_price", 8, 2);
+            $table->decimal("unit_price_usd", 8, 2);
+            $table->decimal("unit_price_bs", 8, 2);
+            $table->decimal("format", 8, 2);
+            $table->integer("quantity");
+            $table->decimal("m", 8, 2);
+            $table->decimal("m2", 8, 2);
+            $table->decimal("total_price_usd", 8, 2);
+            $table->decimal("total_price_bs", 8, 2);
             $table->timestamps();
         });
     }

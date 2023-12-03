@@ -22,6 +22,7 @@ class OrderFactory extends Factory
             "amount" => 0,
             "hash" => $this->faker->uuid(),
             "status" => Order::STATUS["Pending"],
+            'description' => $this->faker->sentence(3),
         ];
     }
 }

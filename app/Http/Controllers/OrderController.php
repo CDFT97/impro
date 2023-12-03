@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Resources\ClientListResource;
 use App\Http\Resources\ProductListResource;
 use App\Models\Client;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -35,16 +37,24 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
+        // dd($order);
         $products = ProductListResource::collection(Product::all());
         return Inertia::render('Orders/Show', compact("order", 'products'));
     }
 
-    public function update(Request $request, Order $order)
+    public function update(OrderUpdateRequest $request, Order $order)
     {
-        //
+        $order->update($request->validated());
+        return back()->with("success", "Se actualizo correctamente la orden");
     }
     public function destroy(Order $order)
     {
-        //
+        try {
+            $order->delete();
+            return back()->with("success", "Se elimino correctamente la orden");
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return redirect()->back()->with('error', 'No se puede eliminar ya que la orden tiene productos, debe cancelarla');
+        }
     }
 }

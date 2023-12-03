@@ -7,7 +7,9 @@ export const useDolarStore = defineStore("dolar", {
             dolar_price: 0,
          };
     },
-    getters: {},
+    getters: {
+        getDolar: (state) => state.dolar_price,
+    },
     actions: {
         async getDolarPrice() {
             try {
