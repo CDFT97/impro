@@ -12,7 +12,7 @@ class Order extends Model
 
     protected $fillable = ["client_id", "amount", "hash", 'status', 'voucher', 'description'];
 
-    protected $with = ["products", "client"];
+    protected $with = ["products", "client", "images"];
 
     const STATUS = ["Pending" => 0, "Completed" => 1, "Canceled" => 2];
 

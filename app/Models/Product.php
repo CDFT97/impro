@@ -14,7 +14,7 @@ class Product extends Model
         "name",
         "material",
         "stock_meters",
-        "stock_quantity",
+        // "stock_quantity",
         "unit_price_in_dollars",
         "description",
     ];

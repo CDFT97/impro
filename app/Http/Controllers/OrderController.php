@@ -7,12 +7,15 @@ use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Resources\ClientListResource;
 use App\Http\Resources\ProductListResource;
 use App\Models\Client;
+use App\Models\Image;
 use App\Models\Order;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -134,6 +137,44 @@ class OrderController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             return redirect()->back()->with('error', 'No se puede eliminar ya que la orden tiene productos, debe cancelarla');
+        }
+    }
+
+    public function addImage(Request $request, Order $order)
+    {
+        try {
+            $data = $request->validate([
+                'image' => 'required|image|max:3048',
+                'image_name' => 'required'
+            ]);
+            
+            $picture = $request->file('image');
+            $name_picture = $request->image_name;
+            $img_url = "img/orders/{$order->id}/";
+            $picture->storeAs($img_url,"{$name_picture}.{$picture->extension()}", 'public');
+
+            Image::create([
+                'order_id' => $order->id,
+                'name' => $name_picture,
+                'url' => asset("storage/{$img_url}{$name_picture}.{$picture->extension()}"),
+                "extension" => $picture->extension()
+            ]);
+            return back()->with("success", "Se agrego correctamente la imagen");
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return redirect()->back()->with('error', 'No se pudo agregar la imagen');
+        }
+    }
+
+    public function removeImage(Image $image)
+    {
+        try {
+            $image->delete();
+            \File::delete(public_path()."/storage/img/orders/{$image->order->id}/{$image->name}.{$image->extension}")  ;  
+            return back()->with("success", "Se elimino correctamente la imagen");
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return back()->with('error', 'No se pudo remover la imagen');
         }
     }
 }

@@ -22,7 +22,7 @@ class ProductFactory extends Factory
             "name" => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
             "material" => $materials[array_rand($materials)],
             "stock_meters" => $m = $meters[array_rand($meters)],
-            "stock_quantity" => $m / 50,
+            // "stock_quantity" => $m / 50,
             "unit_price_in_dollars" => $this->faker->randomFloat(1, 2, 15),
             "description" => $this->faker->text(15),
         ];

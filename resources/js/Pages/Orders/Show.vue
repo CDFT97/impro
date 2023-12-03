@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import ImageGallery from "@/Components/ImageGallery.vue"
+import ImageGallery from "@/Components/ImageGallery.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -36,6 +36,8 @@ const form = useForm({
   description: props.order.description,
   status: props.order.status,
   hash: props.order.hash,
+  image: null,
+  image_name: null,
 });
 
 onMounted(() => {
@@ -142,6 +144,14 @@ const addProductForm = () => {
 
 const updateFormStatus = (status) => {
   form.status = status;
+};
+
+const submitImage = () => {
+  form.post(route("orders.add.image", props.order.id), {
+    onSuccess: () => {
+      form.reset();
+    }
+  })
 };
 </script>
 
@@ -284,10 +294,46 @@ const updateFormStatus = (status) => {
             </tr>
           </tbody>
         </table>
-        <ImageGallery></ImageGallery>
+        <div class="mt-4 text-center" v-if="props.order.status == 1">
+          <h3 class="text-xl font-bold">Galeria de la orden</h3>
+          <form @submit.prevent="submitImage" class="text-center">
+            <div class="mb-3">
+              <InputLabel for="status" value="Nombre de imagen" />
+              <TextInput
+                id="status"
+                type="text"
+                class="mt-1 block w-full"
+                v-model="form.image_name"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="formFile" class="mb-2 inline-block text-neutral-700"
+                >Imagen</label
+              >
+              <input
+                class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
+                type="file"
+                id="formFile"
+                @input="form.image = $event.target.files[0]"
+                required
+              />
+              <InputError :message="form.errors.image" class="mt-2"></InputError>
+              <progress
+                v-if="form.progress"
+                :value="form.progress.percentage"
+                max="100"
+                class="w-full bg-gray-200 rounded-full h-2.5"
+              >
+                {{ form.progress.percentage }}%
+              </progress>
+            </div>
+            <PrimaryButton>Agregar</PrimaryButton>
+          </form>
+        </div>
+        <ImageGallery :images="props.order.images"></ImageGallery>
       </div>
     </div>
-
 
     <!-- Modal Start -->
     <Modal :show="showModal" @close="closeModal">

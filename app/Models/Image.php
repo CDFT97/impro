@@ -10,7 +10,12 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillble = ["name", "order_id", "url"];
+    protected $fillable = [
+        'order_id',
+        'name',
+        'url',
+        'extension'
+    ];
 
     public function order(): Relation 
     {
