@@ -238,8 +238,11 @@ const submitImage = () => {
           >
             <i class="fa-solid fa-plus-circle"></i> Agregar Producto
           </PrimaryButton>
-          <div class="ms-10 mt-2">
-            <p class="flex text-xl">Total: $ {{ props.order.amount }}</p>
+          <div class="ms-10 mt-2 flex">
+            <span class="flex text-xl">Total: $ {{ props.order.amount }}</span>
+            <span 
+              v-if="props.order.client.type === 1"
+              class="flex text-xl ml-4">Este publicista posee un descuento del : $ {{ props.order.client.discount }} %</span>
           </div>
         </div>
       </div>
