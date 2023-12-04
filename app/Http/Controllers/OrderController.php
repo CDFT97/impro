@@ -86,14 +86,9 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
             if($order->client->type == 1) {
-                Log::info("Total bs: " . $request->p_total_bs);
-                Log::info("Total usd: " . $request->p_total_usd);
                 $discount = (100 - $order->client->discount) / 100;
                 $request->p_total_usd = $request->p_total_usd * $discount;
                 $request->p_total_bs = $request->p_total_bs * $discount;
-                Log::info("descuento: " . $discount);
-                Log::info("New price bs: " . $request->p_total_bs);
-                Log::info("New price usd: " . $request->p_total_usd);
             }
             $order->products()->attach($request->product_id, [
                 "dollar_price" => $request->dollar_price,
