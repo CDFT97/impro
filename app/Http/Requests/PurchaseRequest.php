@@ -23,6 +23,8 @@ class PurchaseRequest extends FormRequest
     {
         return [
             "provider_id" => "required|exists:providers,id",
+            "product_id" => "required|exists:products,id",
+            "quantity_meters" => "required|numeric|min:0",
             "amount_usd" => "required|numeric|min:0",
             "amount" => "required|numeric|min:0",
             "date" => "required|date",

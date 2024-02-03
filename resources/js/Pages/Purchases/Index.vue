@@ -24,6 +24,7 @@ const id = ref("");
 const props = defineProps({
   purchases: [],
   providers: [],
+  products: [],
 });
 
 const form = useForm({
@@ -33,6 +34,8 @@ const form = useForm({
   description: "",
   dolar_price: 0,
   provider_id: "empty",
+  product_id: "empty",
+  quantity_meters: 0,
 });
 const openModal = (op, purchase) => {
   modal.value = true;
@@ -50,6 +53,8 @@ const openModal = (op, purchase) => {
     form.description = purchase.description;
     form.dolar_price = purchase.dolar_price;
     form.provider_id = purchase.provider_id;
+    form.product_id = purchase.product_id;
+    form.quantity_meters = purchase.quantity_meters;
   }
 };
 const closeModal = () => {
@@ -90,6 +95,9 @@ const deleteItem = async (purchase) => {
 };
 const updateProvider = (e) => {
   form.provider_id = e;
+};
+const updateProduct = (e) => {
+  form.product_id = e;
 };
 
 const calculateTotal = () => {
@@ -189,6 +197,35 @@ const parseDate = (date) => {
           class="mt-2"
         ></InputError>
       </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="product" value="Producto:"></InputLabel>
+        <SelectInput
+          id="product"
+          v-model="form.product_id"
+          @update="updateProduct"
+          class="mt-1 block w-full"
+          :options="products"
+          placeholder="Seleccione un producto"
+        ></SelectInput>
+        <InputError
+          :message="form.errors.product_id"
+          class="mt-2"
+        ></InputError>
+      </div>
+      <div class="p-3 pb-0">
+        <InputLabel for="quantity_meters" value="Metros:"></InputLabel>
+        <TextInput
+          id="quantity_meters"
+          ref="quantityMeterInput"
+          v-model="form.quantity_meters"
+          type="number"
+          min="1"
+          class="mt-1 block w-3/4"
+          placeholder="Metros de material"
+        ></TextInput>
+        <InputError :message="form.errors.quantity_meters" class="mt-2"></InputError>
+      </div>
+      
       <div class="p-3 pb-0">
         <InputLabel for="amount_usd" value="Monto USD:"></InputLabel>
         <TextInput

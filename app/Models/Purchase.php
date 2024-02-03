@@ -9,12 +9,14 @@ class Purchase extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provider_id', 
+        'provider_id',
+        'product_id',
         'amount_usd', 
         'amount', 
         'date', 
         'description',
-        'dolar_price'
+        'dolar_price',
+        'quantity_meters'
     ];
 
     public function provider()
