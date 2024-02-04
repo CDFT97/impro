@@ -118,14 +118,13 @@ const updateProduct = (e) => {
 };
 
 const calculateTotal = () => {
-  console.log("total");
-  form.p_total_usd = (
-    parseFloat(form.p_unit_usd) *
-    parseFloat(form.format) *
-    parseFloat(form.m) *
-    parseFloat(form.m2) *
-    parseFloat(form.quantity)
-  ).toFixed(2);
+  let m = parseFloat(form.m);
+  let m2 = parseFloat(form.m2);
+  let quantity = parseFloat(form.quantity);
+  let unit_price = parseFloat(form.p_unit_usd);
+  let fm2 = parseFloat(m * m2);
+  let total_price = parseFloat(fm2 * quantity * unit_price).toFixed(2);
+  form.p_total_usd = total_price;
 
   calculateTotalbs();
 };
