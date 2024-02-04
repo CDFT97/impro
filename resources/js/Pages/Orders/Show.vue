@@ -123,7 +123,7 @@ const calculateTotal = () => {
   let quantity = parseFloat(form.quantity);
   let unit_price = parseFloat(form.p_unit_usd);
   let fm2 = parseFloat(m * m2);
-  let total_price = parseFloat(fm2 * quantity * unit_price).toFixed(2);
+  const total_price = parseFloat(fm2 * quantity * unit_price).toFixed(2);
   form.p_total_usd = total_price;
 
   calculateTotalbs();
