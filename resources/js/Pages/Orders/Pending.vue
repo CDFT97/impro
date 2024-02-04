@@ -76,7 +76,7 @@ const updateClient = (e) => {
       <div class="bg-white grid v-screen">
         <div class="mt-3 mb-3 flex ms-10">
           <PrimaryButton @click="openModal">
-            <i class="fa-solid fa-plus-circle"></i> Nueva Compra
+            <i class="fa-solid fa-plus-circle"></i> Nueva Venta
           </PrimaryButton>
         </div>
       </div>
