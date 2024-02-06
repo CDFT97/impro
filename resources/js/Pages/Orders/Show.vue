@@ -15,6 +15,25 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import { useDolarStore } from "@/Stores/dolar";
 
+const formats = [
+  {
+    id: '1.07',
+    name: '1.07'
+  },
+  {
+    id: '1.10',
+    name: '1.10'
+  },
+  {
+    id: 1.18,
+    name: 1.18
+  },
+  {
+    id: 2.20,
+    name: 2.20
+  }
+]
+
 const dolarStore = useDolarStore();
 const props = defineProps({
   order: Object,
@@ -25,7 +44,7 @@ const form = useForm({
   product_id: "empty",
   p_unit_usd: 0,
   p_unit_bs: 0,
-  format: 0,
+  format: 'empty',
   quantity: 0,
   m2: 0,
   m: 0,
@@ -152,6 +171,11 @@ const submitImage = () => {
     }
   })
 };
+
+const updateFormat = (e) => {
+  form.format = e;
+  console.log(form.format)
+}
 </script>
 
 <template>
@@ -414,17 +438,15 @@ const submitImage = () => {
 
         <div class="p-3 pb-0">
           <InputLabel for="format" value="Formato:"></InputLabel>
-          <TextInput
-            @change="calculateTotal"
+          <SelectInput
             id="format"
             v-model="form.format"
-            type="number"
-            step="0.01"
-            min="0.01"
-            placeholder="0"
-            class="mt-1 block w-3/4"
+            @update="updateFormat"
+            class="mt-1 block w-full"
+            :options="formats"
+            placeholder="Seleccione un formato"
             required
-          ></TextInput>
+          ></SelectInput>
           <InputError :message="form.errors.format" class="mt-2"></InputError>
         </div>
 
